@@ -2,6 +2,7 @@ package com.example.RealEstate.service;
 
 import com.example.RealEstate.entity.BuyerEntity;
 import com.example.RealEstate.exception.InputValidationFailedException;
+import com.example.RealEstate.model.BuyerLoginModel;
 import com.example.RealEstate.model.BuyerModel;
 import com.example.RealEstate.repository.BuyerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,15 +24,15 @@ import java.util.List;
 public class BuyerService {
 
     @Autowired
-    private BuyerRepository userRepository;
+    private BuyerRepository buyerRepository;
     public void saveUser(BuyerModel buyerModel, MultipartFile file) throws IOException {
         List<String> userError = new ArrayList<>();
 
        
-        if (userRepository.existsByEmail(buyerModel.getEmail())) {
+        if (buyerRepository.existsByEmail(buyerModel.getEmail())) {
             userError.add("Email already exists");
         }
-        if (userRepository.existsByUsername(buyerModel.getUsername())) {
+        if (buyerRepository.existsByUsername(buyerModel.getUsername())) {
             userError.add("Username already exists");
         }
         if (StringUtils.isEmpty(buyerModel.getFirstname())) {
@@ -84,7 +85,7 @@ public class BuyerService {
         BuyerEntity userEntity = getUserEntity(buyerModel);
 
 
-            userRepository.save(userEntity);
+            buyerRepository.save(userEntity);
 
 
         }
@@ -105,5 +106,33 @@ public class BuyerService {
 
         return userEntity;
     }
+
+    public void buyerLogin(BuyerLoginModel buyerLoginModel) {
+        List<String> userError = new ArrayList<>();
+        if (buyerLoginModel.getUsername() == null || buyerLoginModel.getUsername().isEmpty()) {
+            userError.add("Username cannot be empty");
+        }
+        if (buyerLoginModel.getPassword() == null || buyerLoginModel.getPassword().isEmpty()) {
+            userError.add("Password cannot be empty");
+        }
+
+        int count = buyerRepository.countByUsername(buyerLoginModel.getUsername());
+        if (count == 0) {
+            userError.add("Username does not exist");
+        } else {
+            BuyerEntity buyerEntity = buyerRepository.findByUsernameAndPassword(buyerLoginModel.getUsername(), buyerLoginModel.getPassword());
+            if (buyerEntity == null) {
+                userError.add("Invalid password");
+            }
+        }
+
+        if (!userError.isEmpty()) {
+            throw new InputValidationFailedException("Input validation failed", userError);
+        }
+    }
+
+
+
+
 }
 

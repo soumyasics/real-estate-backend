@@ -1,6 +1,7 @@
 package com.example.RealEstate.controller;
 
 import com.example.RealEstate.exception.InputValidationFailedException;
+import com.example.RealEstate.model.BuyerLoginModel;
 import com.example.RealEstate.model.BuyerModel;
 import com.example.RealEstate.model.SellerModel;
 import com.example.RealEstate.service.BuyerService;
@@ -21,12 +22,12 @@ import java.util.Map;
 @RequestMapping("/user")
 public class BuyerController {
     @Autowired
-    private BuyerService userService;
+    private BuyerService buyerService;
 
     @PostMapping("/register")
-    public ResponseEntity<?> userRegistration(@Valid @ModelAttribute BuyerModel buyerModel, @RequestParam("file") MultipartFile file) {
+    public ResponseEntity<?> buyerRegistration(@Valid @ModelAttribute BuyerModel buyerModel, @RequestParam("file") MultipartFile file) {
         try {
-            userService.saveUser(buyerModel, file);
+            buyerService.saveUser(buyerModel, file);
             Map<String, Object> response = new HashMap<>();
             response.put("message", "User registered successfully");
             response.put("user", buyerModel);
@@ -39,7 +40,17 @@ public class BuyerController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error");
         }
     }
-
+@GetMapping("/buyerlogin")
+    public ResponseEntity<?> buyerLogin(@Valid @RequestBody BuyerLoginModel buyerLoginModel) {
+    try {
+        buyerService.buyerLogin(buyerLoginModel);
+        return ResponseEntity.ok("Login Successfully");
+    } catch (InputValidationFailedException e) {
+        List<String> errors = e.getErrors();
+        String errorMessage = "{ error: { message: \"" + String.join(",", errors) + "\" } }";
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+    }
+}
 
 
 
