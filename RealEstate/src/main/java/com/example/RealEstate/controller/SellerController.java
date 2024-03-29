@@ -1,7 +1,7 @@
 package com.example.RealEstate.controller;
 
+import com.example.RealEstate.entity.SellerEntity;
 import com.example.RealEstate.exception.InputValidationFailedException;
-import com.example.RealEstate.model.BuyerModel;
 import com.example.RealEstate.model.SellerModel;
 import com.example.RealEstate.service.BuyerService;
 import com.example.RealEstate.service.SellerService;
@@ -18,18 +18,19 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/user")
-public class BuyerController {
+@RequestMapping("/Seller")
+public class SellerController {
     @Autowired
-    private BuyerService userService;
+    private SellerService userService;
 
-    @PostMapping("/register")
-    public ResponseEntity<?> userRegistration(@Valid @ModelAttribute BuyerModel buyerModel, @RequestParam("file") MultipartFile file) {
+    @PostMapping("/sellerRegister")
+    public ResponseEntity<?> userRegistration(@Valid @ModelAttribute SellerModel sellerModel, @RequestParam("file") MultipartFile file) {
         try {
-            userService.saveUser(buyerModel, file);
+            System.out.println("inside seller controller");
+            userService.saveUser(sellerModel, file);
             Map<String, Object> response = new HashMap<>();
             response.put("message", "User registered successfully");
-            response.put("user", buyerModel);
+            response.put("user", sellerModel);
             return ResponseEntity.ok(response);
         } catch (InputValidationFailedException e) {
             List<String> errors = e.getErrors();
@@ -39,8 +40,22 @@ public class BuyerController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error");
         }
     }
+    @GetMapping("/test")
+    public ResponseEntity<String> getSampString(){
 
+        return ResponseEntity.ok("Hello  printed");
 
+    }
+//    @GetMapping("/Login")
+//    public ResponseEntity<?> getEmployeeId(@RequestParam("username") String username,@RequestParam("password") String password) {
+//        try {
+//            SellerModel savedSeller = SellerService.getSellerByUname(username, password);
+//            return ResponseEntity.ok(savedSeller);
+//        } catch (ResourceNotFoundException e) {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+//        }
+//
+//    }
 
 
 }
