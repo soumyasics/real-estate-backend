@@ -1,9 +1,13 @@
 package com.example.RealEstate.service;
 
+import com.example.RealEstate.entity.BuyerEntity;
 import com.example.RealEstate.entity.SellerEntity;
 import com.example.RealEstate.exception.InputValidationFailedException;
+import com.example.RealEstate.model.BuyerLoginModel;
+import com.example.RealEstate.model.SellerLoginModel;
 import com.example.RealEstate.model.SellerModel;
 import com.example.RealEstate.repository.SellerRepository;
+import org.apache.velocity.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -15,24 +19,42 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
 public class SellerService {
 
     @Autowired
-    private SellerRepository userRepository;
+    private  SellerRepository userRepository;
 
 
-//    public  SellerEntity getSellerByUname(String username, String password) {
-//        SellerEntity seller=SellerRepository.findByUsername(username)
-//                .orElseThrow(()->
-//                        new ResourceNotFoundException("Employee is not found:"+username));
-//
-//        return EmployeeMapper.maptoEmployeedto(employee);
-//    }
+    public  void sellerLogin(SellerLoginModel sellerLoginModel){
+        List<String> userError = new ArrayList<>();
+        if (sellerLoginModel.getUsername() == null || sellerLoginModel.getUsername().isEmpty()) {
+            userError.add("Username cannot be empty");
+        }
+        if (sellerLoginModel.getPassword() == null || sellerLoginModel.getPassword().isEmpty()) {
+            userError.add("Password cannot be empty");
+        }
+
+        int count = userRepository.countByUsername(sellerLoginModel.getUsername());
+        if (count == 0) {
+            userError.add("Username does not exist");
+        } else {
+            SellerEntity sellerEntity = userRepository.findByUsernameAndPassword(sellerLoginModel.getUsername(), sellerLoginModel.getPassword());
+            if (sellerEntity == null) {
+                userError.add("Invalid password");
+            }
+        }
+
+        if (!userError.isEmpty()) {
+            throw new InputValidationFailedException("Input validation failed", userError);
+        }
+    }
 
 
 
@@ -115,6 +137,26 @@ public class SellerService {
         userEntity.setProfile(sellerModel.getProfile());
 
         return userEntity;
+    }
+
+    public String resetPass(String email, String password){
+
+        if (StringUtils.isEmpty(password)) {
+            return "Password cannot be empty";
+        }
+
+       String email1= String.valueOf(userRepository.findByEmail(email));
+        Optional<SellerEntity> userOptional = Optional.ofNullable(userRepository.findByEmail(email));
+        if(email1.equals(null)){
+            return "Invalid email";
+        }
+        else{
+
+            SellerEntity user=userOptional.get() ;
+            user.setPassword(password);
+            userRepository.save(user);
+        }
+        return "Your password successfully updated.";
     }
 }
 
