@@ -1,13 +1,16 @@
 package com.example.RealEstate.service;
 
-import com.example.RealEstate.entity.BuyerEntity;
+
+import com.example.RealEstate.entity.PropertyEntity;
 import com.example.RealEstate.entity.SellerEntity;
 import com.example.RealEstate.exception.InputValidationFailedException;
-import com.example.RealEstate.model.BuyerLoginModel;
+
+import com.example.RealEstate.model.PropertyModel;
 import com.example.RealEstate.model.SellerLoginModel;
 import com.example.RealEstate.model.SellerModel;
+import com.example.RealEstate.repository.PropertyRepository;
 import com.example.RealEstate.repository.SellerRepository;
-import org.apache.velocity.exception.ResourceNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -19,7 +22,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.time.LocalDateTime;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -30,8 +33,8 @@ public class SellerService {
 
     @Autowired
     private  SellerRepository userRepository;
-
-
+    @Autowired
+    private PropertyRepository propertyRepository;
     public  void sellerLogin(SellerLoginModel sellerLoginModel){
         List<String> userError = new ArrayList<>();
         if (sellerLoginModel.getUsername() == null || sellerLoginModel.getUsername().isEmpty()) {
@@ -138,6 +141,22 @@ public class SellerService {
 
         return userEntity;
     }
+    private static PropertyEntity getPropertyEntity(PropertyModel propertyModel) {
+        PropertyEntity userEntity = new PropertyEntity();
+        //userEntity.setSid(propertyModel.());
+        userEntity.setArea(propertyModel.getArea());
+        userEntity.setCity(propertyModel.getCity() );
+        userEntity.setDistrict(propertyModel.getDistrict());
+        userEntity.setFeatures(propertyModel.getFeatures());
+        userEntity.setPrice(propertyModel.getPrice());
+        userEntity.setLandmark(propertyModel.getLandmark());
+        userEntity.setLat(propertyModel.getLat());
+        userEntity.setLog(propertyModel.getLog());
+        userEntity.setType(propertyModel.getType());
+        userEntity.setIsActive(1);
+        userEntity.setPic(propertyModel.getPic());
+        return userEntity;
+    }
 
     public String resetPass(String email, String password){
 
@@ -157,6 +176,49 @@ public class SellerService {
             userRepository.save(user);
         }
         return "Your password successfully updated.";
+    }
+    public void saveproperty(PropertyModel propertyModel, MultipartFile file) throws IOException {
+        List<String> userError = new ArrayList<>();
+
+        if (StringUtils.isEmpty(propertyModel.getArea())) {
+            userError.add("Area cannot be empty");
+        }
+        if (StringUtils.isEmpty(propertyModel.getCity())) {
+            userError.add("City cannot be empty");
+        }
+        if (StringUtils.isEmpty(propertyModel.getDistrict())) {
+            userError.add("District cannot be empty");
+        }
+        if (StringUtils.isEmpty(propertyModel.getFeatures())) {
+            userError.add("Features cannot be empty");
+        }
+        if (StringUtils.isEmpty(propertyModel.getPrice())) {
+            userError.add("Price cannot be empty");
+        }
+
+
+
+//     PropertyRegister
+
+        // Create a folder
+        File folder = new File("E:\\test1\\real-estate-backend\\propertyimages");
+        if (!folder.exists()) {
+            folder.mkdirs();
+        }
+
+        // Save the image file to folder
+        String fileName = file.getOriginalFilename();
+        Path destination = Paths.get("E:\\test1\\real-estate-backend\\propertyimages", fileName);
+        Files.copy(file.getInputStream(), destination, StandardCopyOption.REPLACE_EXISTING);
+
+        // Set the profile picture path in the user entity
+        propertyModel.setPic("propertyimages/" + fileName);
+
+        PropertyEntity user1Entity = getPropertyEntity(propertyModel);
+
+        propertyRepository.save(user1Entity);
+
+
     }
 }
 

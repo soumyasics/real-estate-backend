@@ -1,6 +1,7 @@
 package com.example.RealEstate.repository;
 
 import com.example.RealEstate.entity.BuyerEntity;
+import com.example.RealEstate.entity.PropertyEntity;
 import com.example.RealEstate.entity.SellerEntity;
 import com.example.RealEstate.model.SellerModel;
 import org.springframework.data.jpa.repository.JpaRepository;
