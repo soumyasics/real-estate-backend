@@ -17,4 +17,7 @@ public interface BuyerRepository extends JpaRepository<BuyerEntity,Long> {
 
     @Query("SELECT COUNT(username) FROM BuyerEntity e WHERE e.username = :username")
     int countByUsername(@Param("username") String username);
+    @Query("SELECT COUNT(email) FROM BuyerEntity e WHERE e.email = :email")
+    int countByEmail(@Param("email") String email);
+    BuyerEntity findByEmail(String email);
 }
