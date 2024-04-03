@@ -3,6 +3,7 @@ package com.example.RealEstate.controller;
 import com.example.RealEstate.exception.InputValidationFailedException;
 import com.example.RealEstate.model.BuyerLoginModel;
 import com.example.RealEstate.model.BuyerModel;
+import com.example.RealEstate.model.BuyerUpdateModel;
 import com.example.RealEstate.model.SellerModel;
 import com.example.RealEstate.service.BuyerService;
 import com.example.RealEstate.service.SellerService;
@@ -52,6 +53,29 @@ public class BuyerController {
     }
 }
 
-
+@PostMapping("/resetPassword")
+    public ResponseEntity<?> resetPassword(@RequestParam String email,@RequestParam String newPassword){
+        try{
+            buyerService.resetPassword(email,newPassword);
+            return ResponseEntity.ok("Password reset Successfully");
+        }catch (InputValidationFailedException e) {
+            List<String> errors = e.getErrors();
+            String errorMessage = "{ error: { message: \"" + String.join(",", errors) + "\" } }";
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+        }
+}
+@PutMapping("/updateBuyer/{id}")
+    public ResponseEntity<String> updateBuyer(@PathVariable("id") Long id,@Valid @ModelAttribute BuyerUpdateModel buyerUpdateModel,@RequestParam("file") MultipartFile file) {
+    try {
+        buyerService.updateBuyer(id,buyerUpdateModel,file);
+        return ResponseEntity.ok("update successfully");
+    } catch (InputValidationFailedException e) {
+        List<String> errors = e.getErrors();
+        String errorMessage = "{ error: { message: \"" + String.join(",", errors) + "\" } }";
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+    } catch (IOException e) {
+        throw new RuntimeException(e);
+    }
+}
 
 }

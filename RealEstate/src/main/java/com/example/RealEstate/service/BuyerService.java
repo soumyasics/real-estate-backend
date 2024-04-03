@@ -4,6 +4,7 @@ import com.example.RealEstate.entity.BuyerEntity;
 import com.example.RealEstate.exception.InputValidationFailedException;
 import com.example.RealEstate.model.BuyerLoginModel;
 import com.example.RealEstate.model.BuyerModel;
+import com.example.RealEstate.model.BuyerUpdateModel;
 import com.example.RealEstate.repository.BuyerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -25,10 +27,11 @@ public class BuyerService {
 
     @Autowired
     private BuyerRepository buyerRepository;
+
     public void saveUser(BuyerModel buyerModel, MultipartFile file) throws IOException {
         List<String> userError = new ArrayList<>();
 
-       
+
         if (buyerRepository.existsByEmail(buyerModel.getEmail())) {
             userError.add("Email already exists");
         }
@@ -50,9 +53,7 @@ public class BuyerService {
         String phoneNumber = String.valueOf(buyerModel.getPhone());
         if (!phoneNumber.matches("[0-9]+")) {
             userError.add("Phone number can only contain digits");
-        }
-
-        else if (StringUtils.isEmpty(buyerModel.getPhone()) || String.valueOf(buyerModel.getPhone()).length() != 10) {
+        } else if (StringUtils.isEmpty(buyerModel.getPhone()) || String.valueOf(buyerModel.getPhone()).length() != 10) {
             userError.add("Phone number must contain 10 digits");
         }
 
@@ -69,26 +70,26 @@ public class BuyerService {
 
 
         // Create a folder
-            File folder = new File("E:\\Estate\\real-estate-backend\\images");
-            if (!folder.exists()) {
-                folder.mkdirs();
-            }
+        File folder = new File("E:\\Estate\\real-estate-backend\\images");
+        if (!folder.exists()) {
+            folder.mkdirs();
+        }
 
-            // Save the image file to folder
-            String fileName = file.getOriginalFilename();
-            Path destination = Paths.get("E:\\Estate\\real-estate-backend\\images", fileName);
-            Files.copy(file.getInputStream(), destination, StandardCopyOption.REPLACE_EXISTING);
+        // Save the image file to folder
+        String fileName = file.getOriginalFilename();
+        Path destination = Paths.get("E:\\Estate\\real-estate-backend\\images", fileName);
+        Files.copy(file.getInputStream(), destination, StandardCopyOption.REPLACE_EXISTING);
 
-            // Set the profile picture path in the user entity
+        // Set the profile picture path in the user entity
         buyerModel.setProfile("images/" + fileName);
 
         BuyerEntity userEntity = getUserEntity(buyerModel);
 
 
-            buyerRepository.save(userEntity);
+        buyerRepository.save(userEntity);
 
 
-        }
+    }
 
     private static BuyerEntity getUserEntity(BuyerModel buyerModel) {
         BuyerEntity userEntity = new BuyerEntity();
@@ -132,7 +133,96 @@ public class BuyerService {
     }
 
 
+    public void resetPassword(String email, String newPassword) {
+
+        List<String> userError = new ArrayList<>();
+        if (email == null || email.isEmpty()) {
+            userError.add("Email cannot be empty");
+        } else if (newPassword == null || newPassword.isEmpty()) {
+            userError.add("Password cannot be empty");
+        } else {
+            int count = buyerRepository.countByEmail(email);
+            if (count == 0) {
+                userError.add("Email not found");
+            } else {
+                BuyerEntity buyerEntity = buyerRepository.findByEmail(email);
+                if (buyerEntity != null) {
+                    buyerEntity.setPassword(newPassword);
+                    buyerRepository.save(buyerEntity);
+                }
+            }
+        }
+        if (!userError.isEmpty()) {
+            throw new InputValidationFailedException("Input validation failed", userError);
+        }
+    }
+
+    public BuyerEntity updateBuyer(Long id,BuyerUpdateModel buyerUpdateModel, MultipartFile file) throws IOException {
+        List<String> userError = new ArrayList<>();
 
 
+        if (StringUtils.isEmpty(buyerUpdateModel.getFirstname())) {
+            userError.add("Firstname cannot be empty");
+        }
+        if (StringUtils.isEmpty(buyerUpdateModel.getLastname())) {
+            userError.add("Lastname cannot be empty");
+        }
+        if (StringUtils.isEmpty(buyerUpdateModel.getDob())) {
+            userError.add("Dob cannot be empty");
+        }
+        if (StringUtils.isEmpty(buyerUpdateModel.getGender())) {
+            userError.add("Gender cannot be empty");
+        }
+        String phoneNumber = String.valueOf(buyerUpdateModel.getPhone());
+        if (!phoneNumber.matches("[0-9]+")) {
+            userError.add("Phone number can only contain digits");
+        } else if (StringUtils.isEmpty(buyerUpdateModel.getPhone()) || String.valueOf(buyerUpdateModel.getPhone()).length() != 10) {
+            userError.add("Phone number must contain 10 digits");
+        }
+
+        if (StringUtils.isEmpty(buyerUpdateModel.getAddress())) {
+            userError.add("Address cannot be empty");
+        }
+        if (StringUtils.isEmpty(buyerUpdateModel.getUsername())) {
+            userError.add("Username cannot be empty");
+        }
+        if (StringUtils.isEmpty(buyerUpdateModel.getEmail())) {
+            userError.add("Email cannot be empty");
+        }
+        if (file == null || file.isEmpty()) {
+            userError.add("File is required");
+        }
+        if (!userError.isEmpty()) {
+            throw new InputValidationFailedException("Input validation failed", userError);
+        }
+
+        String fileName = file.getOriginalFilename();
+        Path destination = Paths.get("E:\\Estate\\real-estate-backend\\images", fileName);
+        Files.copy(file.getInputStream(), destination, StandardCopyOption.REPLACE_EXISTING);
+
+        // Set the profile picture path in the user entity
+        buyerUpdateModel.setProfile("images/" + fileName);
+
+        BuyerEntity buyerEntity =buyerRepository.findById(id).orElseThrow(()-> new InputValidationFailedException("Id not exist",userError));
+        buyerEntity.setFirstname(buyerUpdateModel.getFirstname());
+        buyerEntity.setLastname(buyerUpdateModel.getLastname());
+        buyerEntity.setAge(buyerUpdateModel.getAge());
+        buyerEntity.setDob(buyerUpdateModel.getDob());
+        buyerEntity.setGender(buyerUpdateModel.getGender());
+        buyerEntity.setPhone(buyerUpdateModel.getPhone());
+        buyerEntity.setEmail(buyerUpdateModel.getEmail());
+        buyerEntity.setUsername(buyerUpdateModel.getUsername());
+        buyerEntity.setAddress(buyerUpdateModel.getAddress());
+        buyerEntity.setProfile(buyerUpdateModel.getProfile());
+        return  buyerRepository.save(buyerEntity);
+    }
 }
+
+
+
+
+
+
+
+
 
