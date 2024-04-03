@@ -1,9 +1,16 @@
 package com.example.RealEstate.service;
 
+
+import com.example.RealEstate.entity.PropertyEntity;
 import com.example.RealEstate.entity.SellerEntity;
 import com.example.RealEstate.exception.InputValidationFailedException;
+
+import com.example.RealEstate.model.PropertyModel;
+import com.example.RealEstate.model.SellerLoginModel;
 import com.example.RealEstate.model.SellerModel;
+import com.example.RealEstate.repository.PropertyRepository;
 import com.example.RealEstate.repository.SellerRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -15,24 +22,42 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
 public class SellerService {
 
     @Autowired
-    private SellerRepository userRepository;
+    private  SellerRepository userRepository;
+    @Autowired
+    private PropertyRepository propertyRepository;
+    public  void sellerLogin(SellerLoginModel sellerLoginModel){
+        List<String> userError = new ArrayList<>();
+        if (sellerLoginModel.getUsername() == null || sellerLoginModel.getUsername().isEmpty()) {
+            userError.add("Username cannot be empty");
+        }
+        if (sellerLoginModel.getPassword() == null || sellerLoginModel.getPassword().isEmpty()) {
+            userError.add("Password cannot be empty");
+        }
 
+        int count = userRepository.countByUsername(sellerLoginModel.getUsername());
+        if (count == 0) {
+            userError.add("Username does not exist");
+        } else {
+            SellerEntity sellerEntity = userRepository.findByUsernameAndPassword(sellerLoginModel.getUsername(), sellerLoginModel.getPassword());
+            if (sellerEntity == null) {
+                userError.add("Invalid password");
+            }
+        }
 
-//    public  SellerEntity getSellerByUname(String username, String password) {
-//        SellerEntity seller=SellerRepository.findByUsername(username)
-//                .orElseThrow(()->
-//                        new ResourceNotFoundException("Employee is not found:"+username));
-//
-//        return EmployeeMapper.maptoEmployeedto(employee);
-//    }
+        if (!userError.isEmpty()) {
+            throw new InputValidationFailedException("Input validation failed", userError);
+        }
+    }
 
 
 
@@ -115,6 +140,85 @@ public class SellerService {
         userEntity.setProfile(sellerModel.getProfile());
 
         return userEntity;
+    }
+    private static PropertyEntity getPropertyEntity(PropertyModel propertyModel) {
+        PropertyEntity userEntity = new PropertyEntity();
+        //userEntity.setSid(propertyModel.());
+        userEntity.setArea(propertyModel.getArea());
+        userEntity.setCity(propertyModel.getCity() );
+        userEntity.setDistrict(propertyModel.getDistrict());
+        userEntity.setFeatures(propertyModel.getFeatures());
+        userEntity.setPrice(propertyModel.getPrice());
+        userEntity.setLandmark(propertyModel.getLandmark());
+        userEntity.setLat(propertyModel.getLat());
+        userEntity.setLog(propertyModel.getLog());
+        userEntity.setType(propertyModel.getType());
+        userEntity.setIsActive(1);
+        userEntity.setPic(propertyModel.getPic());
+        return userEntity;
+    }
+
+    public String resetPass(String email, String password){
+
+        if (StringUtils.isEmpty(password)) {
+            return "Password cannot be empty";
+        }
+
+       String email1= String.valueOf(userRepository.findByEmail(email));
+        Optional<SellerEntity> userOptional = Optional.ofNullable(userRepository.findByEmail(email));
+        if(email1.equals(null)){
+            return "Invalid email";
+        }
+        else{
+
+            SellerEntity user=userOptional.get() ;
+            user.setPassword(password);
+            userRepository.save(user);
+        }
+        return "Your password successfully updated.";
+    }
+    public void saveproperty(PropertyModel propertyModel, MultipartFile file) throws IOException {
+        List<String> userError = new ArrayList<>();
+
+        if (StringUtils.isEmpty(propertyModel.getArea())) {
+            userError.add("Area cannot be empty");
+        }
+        if (StringUtils.isEmpty(propertyModel.getCity())) {
+            userError.add("City cannot be empty");
+        }
+        if (StringUtils.isEmpty(propertyModel.getDistrict())) {
+            userError.add("District cannot be empty");
+        }
+        if (StringUtils.isEmpty(propertyModel.getFeatures())) {
+            userError.add("Features cannot be empty");
+        }
+        if (StringUtils.isEmpty(propertyModel.getPrice())) {
+            userError.add("Price cannot be empty");
+        }
+
+
+
+//     PropertyRegister
+
+        // Create a folder
+        File folder = new File("E:\\test1\\real-estate-backend\\propertyimages");
+        if (!folder.exists()) {
+            folder.mkdirs();
+        }
+
+        // Save the image file to folder
+        String fileName = file.getOriginalFilename();
+        Path destination = Paths.get("E:\\test1\\real-estate-backend\\propertyimages", fileName);
+        Files.copy(file.getInputStream(), destination, StandardCopyOption.REPLACE_EXISTING);
+
+        // Set the profile picture path in the user entity
+        propertyModel.setPic("propertyimages/" + fileName);
+
+        PropertyEntity user1Entity = getPropertyEntity(propertyModel);
+
+        propertyRepository.save(user1Entity);
+
+
     }
 }
 

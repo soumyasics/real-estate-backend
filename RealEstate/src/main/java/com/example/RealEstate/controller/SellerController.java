@@ -2,9 +2,12 @@ package com.example.RealEstate.controller;
 
 import com.example.RealEstate.entity.SellerEntity;
 import com.example.RealEstate.exception.InputValidationFailedException;
+import com.example.RealEstate.model.BuyerLoginModel;
+import com.example.RealEstate.model.PropertyModel;
+import com.example.RealEstate.model.SellerLoginModel;
 import com.example.RealEstate.model.SellerModel;
-import com.example.RealEstate.service.BuyerService;
 import com.example.RealEstate.service.SellerService;
+import org.apache.velocity.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -46,17 +49,39 @@ public class SellerController {
         return ResponseEntity.ok("Hello  printed");
 
     }
-    
-//    @GetMapping("/Login")
-//    public ResponseEntity<?> getEmployeeId(@RequestParam("username") String username,@RequestParam("password") String password) {
-//        try {
-//            SellerModel savedSeller = SellerService.getSellerByUname(username, password);
-//            return ResponseEntity.ok(savedSeller);
-//        } catch (ResourceNotFoundException e) {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-//        }
-//
-//    }
 
+    @GetMapping("/sellerlogin")
+    public ResponseEntity<?> sellerLogin(@Valid @RequestBody SellerLoginModel sellerLoginModel) {
+        try {
+            userService.sellerLogin(sellerLoginModel);
+            return ResponseEntity.ok("Login Successfully");
+        } catch (InputValidationFailedException e) {
+            List<String> errors = e.getErrors();
+            String errorMessage = "{ error: { message: \"" + String.join(",", errors) + "\" } }";
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+        }
+    }
+    @PutMapping("/resetSeller-password")
+    public String resetPass(@RequestParam String email, @RequestParam String password){
+        return userService.resetPass(email,password);
+    }
+
+    @PostMapping("/AddProperty")
+    public ResponseEntity<?> propertyRegistration(@Valid @ModelAttribute PropertyModel propertyModel, @RequestParam("file") MultipartFile file) {
+        try {
+            System.out.println("inside seller controller");
+            userService.saveproperty(propertyModel, file);
+            Map<String, Object> response = new HashMap<>();
+            response.put("message", "User registered successfully");
+            response.put("user", propertyModel);
+            return ResponseEntity.ok(response);
+        } catch (InputValidationFailedException e) {
+            List<String> errors = e.getErrors();
+            String errorMessage = "{ error: { message: \"" + String.join(",", errors) + "\" } }";
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error");
+        }
+    }
 
 }
