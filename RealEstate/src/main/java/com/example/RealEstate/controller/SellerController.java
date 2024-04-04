@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/Seller")
@@ -84,11 +85,12 @@ public class SellerController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error");
         }
     }
+
     @PutMapping("/EditProperty{id}")
-       public ResponseEntity<?> Editproperty(@PathVariable("id") Long id , @ModelAttribute PropertyModel propertyModel, @RequestParam("file") MultipartFile file) {
+    public ResponseEntity<?> Editproperty(@PathVariable("id") Long id, @ModelAttribute PropertyModel propertyModel, @RequestParam("file") MultipartFile file) {
         try {
             System.out.println("inside seller controller");
-            userService.updateProperty(id,propertyModel, file);
+            userService.updateProperty(id, propertyModel, file);
             Map<String, Object> response = new HashMap<>();
             response.put("message", "User Updated successfully");
             response.put("user", propertyModel);
@@ -104,6 +106,25 @@ public class SellerController {
 
         userService.deletePropertybyId(id);
         return ResponseEntity.ok("Property deleted sucessfully!!!");
+    }
+    @GetMapping("/property{id}")
+    public ResponseEntity<?> getPropertyId(@PathVariable("id") Long id ) {
+        try {
+            PropertyEntity savedProperty = userService.getPropertybyId(id);
+            return ResponseEntity.ok(savedProperty);
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+
+    }
+    @GetMapping("/bysellerid{sid}")
+    public ResponseEntity<List<PropertyEntity>> getPropertySId(@PathVariable("sid") Long id ) {
+
+        List<PropertyEntity> savedProperty = userService.getPropertybySId(id);
+
+        //List<User> users = userService.getUsersByCondition(condition);
+        return new ResponseEntity<>(savedProperty, HttpStatus.OK);
+
     }
 
 }
