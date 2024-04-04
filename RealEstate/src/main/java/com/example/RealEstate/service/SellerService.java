@@ -143,7 +143,7 @@ public class SellerService {
     }
     private static PropertyEntity getPropertyEntity(PropertyModel propertyModel) {
         PropertyEntity userEntity = new PropertyEntity();
-        //userEntity.setSid(propertyModel.());
+        userEntity.setSid(propertyModel.getSid());
         userEntity.setArea(propertyModel.getArea());
         userEntity.setCity(propertyModel.getCity() );
         userEntity.setDistrict(propertyModel.getDistrict());

@@ -56,14 +56,18 @@ public class BuyerService {
         } else if (StringUtils.isEmpty(buyerModel.getPhone()) || String.valueOf(buyerModel.getPhone()).length() != 10) {
             userError.add("Phone number must contain 10 digits");
         }
-
+        if (StringUtils.isEmpty(buyerModel.getUsername())) {
+            userError.add("Username cannot be empty");
+        }
         if (StringUtils.isEmpty(buyerModel.getAddress())) {
             userError.add("Address cannot be empty");
         }
         if (StringUtils.isEmpty(buyerModel.getPassword())) {
             userError.add("Password cannot be empty");
         }
-
+        if (file == null || file.isEmpty()) {
+            userError.add("File is required");
+        }
         if (!userError.isEmpty()) {
             throw new InputValidationFailedException("Input validation failed", userError);
         }
