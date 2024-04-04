@@ -13,6 +13,7 @@ import lombok.Setter;
 
 public class PropertyModel {
 
+    private  Long sid;
     private String pic;
     private double lat;
     private double log;
