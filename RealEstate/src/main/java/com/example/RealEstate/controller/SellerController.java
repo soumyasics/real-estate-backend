@@ -1,5 +1,6 @@
 package com.example.RealEstate.controller;
 
+import com.example.RealEstate.entity.PropertyEntity;
 import com.example.RealEstate.entity.SellerEntity;
 import com.example.RealEstate.exception.InputValidationFailedException;
 import com.example.RealEstate.model.BuyerLoginModel;
@@ -70,10 +71,10 @@ public class SellerController {
     public ResponseEntity<?> propertyRegistration(@Valid @ModelAttribute PropertyModel propertyModel, @RequestParam("file") MultipartFile file) {
         try {
             System.out.println("inside seller controller");
-            userService.saveproperty(propertyModel, file);
+            PropertyEntity user1Entity=userService.saveproperty(propertyModel, file);
             Map<String, Object> response = new HashMap<>();
             response.put("message", "User registered successfully");
-            response.put("user", propertyModel);
+            response.put("user", user1Entity);
             return ResponseEntity.ok(response);
         } catch (InputValidationFailedException e) {
             List<String> errors = e.getErrors();
@@ -82,6 +83,27 @@ public class SellerController {
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error");
         }
+    }
+    @PutMapping("/EditProperty{id}")
+       public ResponseEntity<?> Editproperty(@PathVariable("id") Long id , @ModelAttribute PropertyModel propertyModel, @RequestParam("file") MultipartFile file) {
+        try {
+            System.out.println("inside seller controller");
+            userService.updateProperty(id,propertyModel, file);
+            Map<String, Object> response = new HashMap<>();
+            response.put("message", "User Updated successfully");
+            response.put("user", propertyModel);
+            return ResponseEntity.ok(response);
+        } catch (InputValidationFailedException e) {
+            List<String> errors = e.getErrors();
+            String errorMessage = "{ error: { message: \"" + String.join(",", errors) + "\" } }";
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+        }
+    }
+    @DeleteMapping("/DeleteProperty{id}")
+    public ResponseEntity<String> deletePropertybyId(@PathVariable("id") Long id ) {
+
+        userService.deletePropertybyId(id);
+        return ResponseEntity.ok("Property deleted sucessfully!!!");
     }
 
 }

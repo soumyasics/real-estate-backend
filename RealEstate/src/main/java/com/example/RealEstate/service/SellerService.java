@@ -11,6 +11,7 @@ import com.example.RealEstate.model.SellerModel;
 import com.example.RealEstate.repository.PropertyRepository;
 import com.example.RealEstate.repository.SellerRepository;
 
+import org.apache.velocity.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -177,7 +178,7 @@ public class SellerService {
         }
         return "Your password successfully updated.";
     }
-    public void saveproperty(PropertyModel propertyModel, MultipartFile file) throws IOException {
+    public PropertyEntity saveproperty(PropertyModel propertyModel, MultipartFile file) throws IOException {
         List<String> userError = new ArrayList<>();
 
         if (StringUtils.isEmpty(propertyModel.getArea())) {
@@ -217,8 +218,32 @@ public class SellerService {
         PropertyEntity user1Entity = getPropertyEntity(propertyModel);
 
         propertyRepository.save(user1Entity);
+return user1Entity;
 
-
+    }
+    public PropertyEntity updateProperty(Long id, PropertyModel propertyModel,MultipartFile file) {
+        PropertyEntity property=propertyRepository.findById(id)
+                .orElseThrow(()->
+                        new ResourceNotFoundException("Employee is not found:"+id));
+        property.setArea(propertyModel.getArea());
+        property.setCity(propertyModel.getCity() );
+        property.setDistrict(propertyModel.getDistrict());
+        property.setFeatures(propertyModel.getFeatures());
+        property.setPrice(propertyModel.getPrice());
+        property.setLandmark(propertyModel.getLandmark());
+        property.setLat(propertyModel.getLat());
+        property.setLog(propertyModel.getLog());
+        property.setType(propertyModel.getType());
+        property.setIsActive(1);
+        property.setPic(propertyModel.getPic());
+        PropertyEntity updatedpropertyobj = propertyRepository.save(property);
+        return updatedpropertyobj;
+    }
+    public void deletePropertybyId(Long id) {
+        PropertyEntity propertyEntity=propertyRepository.findById(id)
+                .orElseThrow(()->
+                        new ResourceNotFoundException("Property is not found:"+id));
+        propertyRepository.deleteById(id);
     }
 }
 
