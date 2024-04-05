@@ -6,6 +6,7 @@ import com.example.RealEstate.entity.SellerEntity;
 import com.example.RealEstate.exception.InputValidationFailedException;
 
 import com.example.RealEstate.model.PropertyListingModel;
+import com.example.RealEstate.model.PropertyAndSeller;
 import com.example.RealEstate.model.PropertyModel;
 import com.example.RealEstate.model.SellerLoginModel;
 import com.example.RealEstate.model.SellerModel;
@@ -159,6 +160,22 @@ public class SellerService {
         userEntity.setPic(propertyModel.getPic());
         return userEntity;
     }
+    public static PropertyModel getPropertyModel(PropertyEntity propertyentity) {
+        PropertyModel userEntity = new PropertyModel();
+        userEntity.setSid(propertyentity.getSid());
+        userEntity.setArea(propertyentity.getArea());
+        userEntity.setCity(propertyentity.getCity() );
+        userEntity.setDistrict(propertyentity.getDistrict());
+        userEntity.setFeatures(propertyentity.getFeatures());
+        userEntity.setPrice(propertyentity.getPrice());
+        userEntity.setLandmark(propertyentity.getLandmark());
+        userEntity.setLat(propertyentity.getLat());
+        userEntity.setLog(propertyentity.getLog());
+        userEntity.setType(propertyentity.getType());
+        userEntity.setIsActive(propertyentity.getIsActive());
+        userEntity.setPic(propertyentity.getPic());
+        return userEntity;
+    }
 
     public String resetPass(String email, String password){
 
@@ -253,5 +270,18 @@ return user1Entity;
         return results;
     }
 
+
+    public PropertyEntity getPropertybyId(Long id) {
+        PropertyEntity property=propertyRepository.findById(id)
+                .orElseThrow(()->
+                        new ResourceNotFoundException("Employee is not found:"+id));
+
+        return property;
+    }
+    public List<PropertyEntity> getPropertybySId(Long sid) {
+        List<PropertyEntity> properties=propertyRepository.findBySId(sid);
+
+        return properties;
+    }
 }
 
