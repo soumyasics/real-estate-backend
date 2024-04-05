@@ -3,10 +3,7 @@ package com.example.RealEstate.controller;
 import com.example.RealEstate.entity.PropertyEntity;
 import com.example.RealEstate.entity.SellerEntity;
 import com.example.RealEstate.exception.InputValidationFailedException;
-import com.example.RealEstate.model.BuyerLoginModel;
-import com.example.RealEstate.model.PropertyModel;
-import com.example.RealEstate.model.SellerLoginModel;
-import com.example.RealEstate.model.SellerModel;
+import com.example.RealEstate.model.*;
 import com.example.RealEstate.service.SellerService;
 import org.apache.velocity.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -107,6 +104,12 @@ public class SellerController {
         userService.deletePropertybyId(id);
         return ResponseEntity.ok("Property deleted sucessfully!!!");
     }
+    @GetMapping("/propertyListing")
+    public ResponseEntity<List<PropertyListingModel>> propertyListing() {
+        List<PropertyListingModel> propertyListingModel = userService.getAllProperties();
+        return ResponseEntity.ok(propertyListingModel);
+    }
+
     @GetMapping("/property{id}")
     public ResponseEntity<?> getPropertyId(@PathVariable("id") Long id ) {
         try {

@@ -1,52 +1,35 @@
 package com.example.RealEstate.model;
 
-
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-
-
-public class PropertyModel {
-
-    private  Long sid;
+public class PropertyListingModel {
     private String pic;
-    private double lat;
-    private double log;
+    private Double lat;
+    private Double log;
     private String district;
     private String city;
     private String type;
-    private int isActive;
     private String landmark;
     private String features;
-    private int price;
+    private Integer price;
     private String area;
+    private String sellerName;
+    private String sellerEmail;
 
-    public PropertyModel() {
+    public PropertyListingModel() {
     }
 
-    public PropertyModel(Long sid, String pic, double lat, double log, String district, String city, String type, int isActive, String landmark, String features, int price, String area) {
-        this.sid = sid;
+    public PropertyListingModel(String pic, Double lat, Double log, String district, String city, String type, String landmark, String features, Integer price, String area, String sellerName, String sellerEmail) {
         this.pic = pic;
         this.lat = lat;
         this.log = log;
         this.district = district;
         this.city = city;
         this.type = type;
-        this.isActive = isActive;
         this.landmark = landmark;
         this.features = features;
         this.price = price;
         this.area = area;
-    }
-
-    public Long getSid() {
-        return sid;
-    }
-
-    public void setSid(Long sid) {
-        this.sid = sid;
+        this.sellerName = sellerName;
+        this.sellerEmail = sellerEmail;
     }
 
     public String getPic() {
@@ -57,19 +40,19 @@ public class PropertyModel {
         this.pic = pic;
     }
 
-    public double getLat() {
+    public Double getLat() {
         return lat;
     }
 
-    public void setLat(double lat) {
+    public void setLat(Double lat) {
         this.lat = lat;
     }
 
-    public double getLog() {
+    public Double getlog() {
         return log;
     }
 
-    public void setLog(double log) {
+    public void setlog(Double log) {
         this.log = log;
     }
 
@@ -97,14 +80,6 @@ public class PropertyModel {
         this.type = type;
     }
 
-    public int getIsActive() {
-        return isActive;
-    }
-
-    public void setIsActive(int isActive) {
-        this.isActive = isActive;
-    }
-
     public String getLandmark() {
         return landmark;
     }
@@ -121,11 +96,11 @@ public class PropertyModel {
         this.features = features;
     }
 
-    public int getPrice() {
+    public Integer getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(Integer price) {
         this.price = price;
     }
 
@@ -135,5 +110,21 @@ public class PropertyModel {
 
     public void setArea(String area) {
         this.area = area;
+    }
+
+    public String getSellerName() {
+        return sellerName;
+    }
+
+    public void setSellerName(String sellerName) {
+        this.sellerName = sellerName;
+    }
+
+    public String getSellerEmail() {
+        return sellerEmail;
+    }
+
+    public void setSellerEmail(String sellerEmail) {
+        this.sellerEmail = sellerEmail;
     }
 }
