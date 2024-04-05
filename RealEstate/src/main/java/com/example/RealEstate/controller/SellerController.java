@@ -111,6 +111,7 @@ public class SellerController {
     public ResponseEntity<?> getPropertyId(@PathVariable("id") Long id ) {
         try {
             PropertyEntity savedProperty = userService.getPropertybyId(id);
+            //SellerEntity savedseller= userService.getPropertybyId(id);
             return ResponseEntity.ok(savedProperty);
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());

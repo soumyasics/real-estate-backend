@@ -12,7 +12,8 @@ import java.util.Optional;
 public interface PropertyRepository extends JpaRepository<PropertyEntity,Long> {
 
     @Query("SELECT e FROM PropertyEntity e WHERE e.sid = :id ")
-    List<PropertyEntity> findByPId(Long id);
+    List<PropertyEntity> findBySId(Long id);
 
 
 }
+ 
