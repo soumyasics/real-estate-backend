@@ -5,6 +5,7 @@ import com.example.RealEstate.entity.PropertyEntity;
 import com.example.RealEstate.entity.SellerEntity;
 import com.example.RealEstate.exception.InputValidationFailedException;
 
+import com.example.RealEstate.model.PropertyAndSeller;
 import com.example.RealEstate.model.PropertyModel;
 import com.example.RealEstate.model.SellerLoginModel;
 import com.example.RealEstate.model.SellerModel;
@@ -265,12 +266,12 @@ return user1Entity;
     public PropertyEntity getPropertybyId(Long id) {
         PropertyEntity property=propertyRepository.findById(id)
                 .orElseThrow(()->
-                        new ResourceNotFoundException("Property is not found:"+id));
+                        new ResourceNotFoundException("Employee is not found:"+id));
 
         return property;
     }
     public List<PropertyEntity> getPropertybySId(Long sid) {
-        List<PropertyEntity> properties=propertyRepository.findByPId(sid);
+        List<PropertyEntity> properties=propertyRepository.findBySId(sid);
 
         return properties;
     }
