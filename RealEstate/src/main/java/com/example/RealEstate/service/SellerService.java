@@ -217,14 +217,14 @@ public class SellerService {
 //     PropertyRegister
 
         // Create a folder
-        File folder = new File("E:\\test1\\real-estate-backend\\propertyimages");
+        File folder = new File("D:\\realestate\\real-estate-backend\\propertyimages");
         if (!folder.exists()) {
             folder.mkdirs();
         }
 
         // Save the image file to folder
         String fileName = file.getOriginalFilename();
-        Path destination = Paths.get("E:\\test1\\real-estate-backend\\propertyimages", fileName);
+        Path destination = Paths.get("D:\\realestate\\real-estate-backend\\propertyimages", fileName);
         Files.copy(file.getInputStream(), destination, StandardCopyOption.REPLACE_EXISTING);
 
         // Set the profile picture path in the user entity
