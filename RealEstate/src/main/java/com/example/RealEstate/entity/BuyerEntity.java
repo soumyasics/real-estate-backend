@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 
 
 @Entity
-@Table(name="buyer")
+@Table(name="user")
 
 public class BuyerEntity {
     @Id

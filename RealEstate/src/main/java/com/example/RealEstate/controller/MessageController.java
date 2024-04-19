@@ -5,6 +5,7 @@ import com.example.RealEstate.entity.PropertyEntity;
 import com.example.RealEstate.entity.SellerEntity;
 import com.example.RealEstate.exception.InputValidationFailedException;
 import com.example.RealEstate.model.MessageRequestModel;
+import com.example.RealEstate.model.OrderModel;
 import com.example.RealEstate.repository.BuyerRepository;
 import com.example.RealEstate.repository.PropertyRepository;
 import com.example.RealEstate.repository.SellerRepository;
@@ -40,7 +41,17 @@ public class MessageController {
         }
         return ResponseEntity.ok("Message sent successfully");
     }
-
+    @PostMapping("/order")
+    public ResponseEntity<?> placeOrder(@RequestBody OrderModel orderModel) {
+        try {
+            messageRequestService.placeOrder(orderModel);
+        } catch (InputValidationFailedException e) {
+            List<String> errors = e.getErrors();
+            String errorMessage = "{ error: { message: \"" + String.join(",", errors) + "\" } }";
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+        }
+        return ResponseEntity.ok("Ordered successfully");
+    }
 }
 
 
