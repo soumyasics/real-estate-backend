@@ -7,6 +7,8 @@ import com.example.RealEstate.model.BuyerUpdateModel;
 import com.example.RealEstate.model.SellerModel;
 import com.example.RealEstate.service.BuyerService;
 import com.example.RealEstate.service.SellerService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,7 +47,7 @@ public class BuyerController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error");
         }
     }
-@GetMapping("/buyerlogin")
+@PostMapping("/buyerlogin")
     public ResponseEntity<?> buyerLogin(@Valid @RequestBody BuyerLoginModel buyerLoginModel) {
     try {
         buyerService.buyerLogin(buyerLoginModel);
@@ -81,5 +83,14 @@ public class BuyerController {
         throw new RuntimeException(e);
     }
 }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
+        return ResponseEntity.ok("Logout successful");
+    }
 
 }

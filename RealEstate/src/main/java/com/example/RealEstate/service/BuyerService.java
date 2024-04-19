@@ -6,8 +6,6 @@ import com.example.RealEstate.model.BuyerLoginModel;
 import com.example.RealEstate.model.BuyerModel;
 import com.example.RealEstate.model.BuyerUpdateModel;
 import com.example.RealEstate.repository.BuyerRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -22,7 +20,6 @@ import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 
 @Service
@@ -31,16 +28,9 @@ public class BuyerService {
     @Autowired
     private BuyerRepository buyerRepository;
 
-    public void saveUser(BuyerModel buyerModel,MultipartFile file) throws IOException {
+    public void saveUser(BuyerModel buyerModel, MultipartFile file) throws IOException {
         List<String> userError = new ArrayList<>();
-        Logger logger = LoggerFactory.getLogger(this.getClass());
 
-        // Log the values entered through Postman
-        logger.info("Received user data from Postman:");
-        logger.info("Firstname: " + buyerModel.getFirstname());
-        logger.info("Lastname: " + buyerModel.getLastname());
-        logger.info("Email: " + buyerModel.getEmail());
-        // Log other fields as needed
 
         if (buyerRepository.existsByEmail(buyerModel.getEmail())) {
             userError.add("Email already exists");
@@ -84,32 +74,20 @@ public class BuyerService {
 
 
         // Create a folder
-        File folder = new File("D:\\realestate\\real-estate-backend\\images");
+        File folder = new File("E:\\Estate\\real-estate-backend\\images");
         if (!folder.exists()) {
             folder.mkdirs();
         }
 
         // Save the image file to folder
         String fileName = file.getOriginalFilename();
-        Path destination = Paths.get("D:\\realestate\\real-estate-backend\\images", fileName);
+        Path destination = Paths.get("E:\\Estate\\real-estate-backend\\images", fileName);
         Files.copy(file.getInputStream(), destination, StandardCopyOption.REPLACE_EXISTING);
 
-         //Set the profile picture path in the user entity
+        // Set the profile picture path in the user entity
         buyerModel.setProfile("images/" + fileName);
 
         BuyerEntity userEntity = getUserEntity(buyerModel);
-        logger.info("User entity details:");
-        logger.info("Firstname: " + userEntity.getFirstname());
-        logger.info("Lastname: " + userEntity.getLastname());
-        logger.info("Age: " + userEntity.getAge());
-        logger.info("Dob: " + userEntity.getDob());
-        logger.info("Gender: " + userEntity.getGender());
-        logger.info("Phone: " + userEntity.getPhone());
-        logger.info("Email: " + userEntity.getEmail());
-        logger.info("Address: " + userEntity.getAddress());
-        logger.info("Username: " + userEntity.getUsername());
-        logger.info("Password: " + userEntity.getPassword());
-        logger.info("Profile: " + userEntity.getProfile());
 
 
         buyerRepository.save(userEntity);
@@ -129,7 +107,7 @@ public class BuyerService {
         userEntity.setAddress(buyerModel.getAddress());
         userEntity.setUsername(buyerModel.getUsername());
         userEntity.setPassword(buyerModel.getPassword());
-        //userEntity.setProfile(buyerModel.getProfile());
+        userEntity.setProfile(buyerModel.getProfile());
 
         return userEntity;
     }

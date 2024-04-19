@@ -15,6 +15,9 @@ public interface SellerRepository extends JpaRepository<SellerEntity,Long> {
 
     boolean existsByEmail(String email);
     boolean existsByUsername(String username);
+
+    @Query("SELECT id FROM SellerEntity")
+    Optional<Long> findByID();
     SellerEntity findByEmail(String email);
 //    SellerEntity findByToken(String token);
     @Query("SELECT e FROM SellerEntity e WHERE e.username = :username AND e.password = :password")
