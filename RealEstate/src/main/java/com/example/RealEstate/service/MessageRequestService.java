@@ -57,12 +57,29 @@ private OrderRepository orderRepository;
         messageRepository.save(messageRequestEntity);
     }
 
-//    public void placeOrder(OrderModel orderModel) {
-//        OrderEntity orderEntity=new OrderEntity();
-//        orderEntity.setBuyerid(orderModel.getBuyerId());
-//        orderEntity.setSellerid(orderModel.getSellerId());
-//        orderEntity.setPropertyid(orderModel.getPropertyId());
-//        orderEntity.setPrice(orderModel.getPrice());
-//orderRepository.save(orderEntity);
-//    }
+    public void placeOrder(OrderModel orderModel) {
+        List<String> userError = new ArrayList<>();
+
+        if (orderModel.getBuyerId() == null || orderModel.getBuyerId() ==0) {
+            userError.add("BuyerId cannot be empty");
+        }
+        if (orderModel.getSellerId() == null || orderModel.getSellerId() ==0) {
+            userError.add("SellerId cannot be empty");
+        }
+        if (orderModel.getPropertyId() == null || orderModel.getPropertyId() ==0) {
+            userError.add("PropertyId cannot be empty");
+        }
+        if (orderModel.getPrice() == null || orderModel.getPrice()== 0) {
+            userError.add("Price cannot be zero");
+        }
+        if (!userError.isEmpty()) {
+            throw new InputValidationFailedException("Input validation failed", userError);
+        }
+        OrderEntity orderEntity=new OrderEntity();
+        orderEntity.setBuyerId(orderModel.getBuyerId());
+        orderEntity.setSellerId(orderModel.getSellerId());
+        orderEntity.setPropertyId(orderModel.getPropertyId());
+        orderEntity.setPrice(orderModel.getPrice());
+orderRepository.save(orderEntity);
+    }
 }
