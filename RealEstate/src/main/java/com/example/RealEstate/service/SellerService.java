@@ -278,5 +278,13 @@ return user1Entity;
 
         return properties;
     }
+
+    public Long getSellerId(Long sellerid) {
+        return sellerid;
+    }
+
+    public Long getPropertyId(Long id) {
+        return id;
+    }
 }
 
