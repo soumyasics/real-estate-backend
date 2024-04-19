@@ -6,16 +6,13 @@ import com.example.RealEstate.model.BuyerLoginModel;
 import com.example.RealEstate.model.BuyerModel;
 import com.example.RealEstate.model.BuyerUpdateModel;
 import com.example.RealEstate.repository.BuyerRepository;
-import jakarta.persistence.metamodel.SingularAttribute;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.domain.AbstractPersistable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -223,9 +220,6 @@ public class BuyerService {
         buyerEntity.setProfile(buyerUpdateModel.getProfile());
         return  buyerRepository.save(buyerEntity);
     }
-
-
-
 }
 
 
