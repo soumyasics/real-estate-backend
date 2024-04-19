@@ -4,12 +4,12 @@ public class OrderModel {
     private Long buyerId;
     private Long sellerId;
     private Long propertyId;
-    private double price;
+    private Double price;
 
     public OrderModel() {
     }
 
-    public OrderModel(Long buyerId, Long sellerId, Long propertyId, double price) {
+    public OrderModel(Long buyerId, Long sellerId, Long propertyId, Double price) {
         this.buyerId = buyerId;
         this.sellerId = sellerId;
         this.propertyId = propertyId;
@@ -40,11 +40,11 @@ public class OrderModel {
         this.propertyId = propertyId;
     }
 
-    public double getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 }
