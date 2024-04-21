@@ -55,7 +55,11 @@ public class BuyerController {
     public ResponseEntity<?> buyerLogin(@Valid @RequestBody BuyerLoginModel buyerLoginModel) {
     try {
         buyerService.buyerLogin(buyerLoginModel);
-        return ResponseEntity.ok("Login Successfully");
+        Long userId = buyerService.buyerLogin(buyerLoginModel);
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "Login Successfully");
+        response.put("userId", userId);
+        return ResponseEntity.ok(response);
     } catch (InputValidationFailedException e) {
         List<String> errors = e.getErrors();
         String errorMessage = "{ error: { message: \"" + String.join(",", errors) + "\" } }";
