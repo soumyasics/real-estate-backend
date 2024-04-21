@@ -41,7 +41,7 @@ public class BuyerController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error");
         }
     }
-@GetMapping("/buyerlogin")
+@GetMapping("/buyerloginbuyerlogin")
     public ResponseEntity<?> buyerLogin(@Valid @RequestBody BuyerLoginModel buyerLoginModel) {
     try {
         buyerService.buyerLogin(buyerLoginModel);
