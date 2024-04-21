@@ -44,6 +44,9 @@ public class BuyerService {
         if (StringUtils.isEmpty(buyerModel.getLastname())) {
             userError.add("Lastname cannot be empty");
         }
+        if (buyerModel.getAge()==0 || buyerModel.getAge()==null) {
+            userError.add("Age cannot be empty");
+        }
         if (StringUtils.isEmpty(buyerModel.getDob())) {
             userError.add("Dob cannot be empty");
         }
@@ -74,14 +77,14 @@ public class BuyerService {
 
 
         // Create a folder
-        File folder = new File("E:\\Estate\\real-estate-backend\\images");
+        File folder = new File("C:\\Users\\ajeen\\OneDrive\\Desktop\\realestate\\real-estate-backend\\images");
         if (!folder.exists()) {
             folder.mkdirs();
         }
 
         // Save the image file to folder
         String fileName = file.getOriginalFilename();
-        Path destination = Paths.get("E:\\Estate\\real-estate-backend\\images", fileName);
+        Path destination = Paths.get("C:\\Users\\ajeen\\OneDrive\\Desktop\\realestate\\real-estate-backend\\images", fileName);
         Files.copy(file.getInputStream(), destination, StandardCopyOption.REPLACE_EXISTING);
 
         // Set the profile picture path in the user entity

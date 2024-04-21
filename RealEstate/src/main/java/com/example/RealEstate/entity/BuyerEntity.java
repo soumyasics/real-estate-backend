@@ -16,7 +16,7 @@ public class BuyerEntity {
     @Column(name = "lastname")
     private String lastname;
     @Column(name = "age")
-    private int age;
+    private Integer age;
   @Column (name = "dob")
     private String  dob;
     @Column(name = "gender")

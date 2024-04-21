@@ -105,14 +105,14 @@ public class SellerService {
 //     sellerRegister
 
         // Create a folder
-            File folder = new File("E:\\test1\\real-estate-backend\\sellerproimages");
+            File folder = new File("C:\\Users\\ajeen\\OneDrive\\Desktop\\realestate\\real-estate-backend\\sellerproimages");
             if (!folder.exists()) {
                 folder.mkdirs();
             }
 
             // Save the image file to folder
             String fileName = file.getOriginalFilename();
-            Path destination = Paths.get("E:\\test1\\real-estate-backend\\sellerproimages", fileName);
+            Path destination = Paths.get("C:\\Users\\ajeen\\OneDrive\\Desktop\\realestate\\real-estate-backend\\sellerproimages", fileName);
             Files.copy(file.getInputStream(), destination, StandardCopyOption.REPLACE_EXISTING);
 
             // Set the profile picture path in the user entity
