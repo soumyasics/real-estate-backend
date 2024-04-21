@@ -72,7 +72,7 @@ public class SellerController {
             System.out.println("inside seller controller");
             PropertyEntity user1Entity=userService.saveproperty(propertyModel, file);
             Map<String, Object> response = new HashMap<>();
-            response.put("message", "User registered successfully");
+            response.put("message", "property added successfully ");
             response.put("user", user1Entity);
             return ResponseEntity.ok(response);
         } catch (InputValidationFailedException e) {
