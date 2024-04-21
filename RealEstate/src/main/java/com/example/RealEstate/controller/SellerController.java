@@ -32,7 +32,7 @@ public class SellerController {
             System.out.println("inside seller controller");
             userService.saveUser(sellerModel, file);
             Map<String, Object> response = new HashMap<>();
-            response.put("message", "User registered successfully");
+            response.put("message", "Seller registered successfully");
             response.put("user", sellerModel);
             return ResponseEntity.ok(response);
         } catch (InputValidationFailedException e) {
@@ -50,7 +50,7 @@ public class SellerController {
 
     }
 
-    @GetMapping("/sellerlogin")
+    @PostMapping("/sellerlogin")
     public ResponseEntity<?> sellerLogin(@Valid @RequestBody SellerLoginModel sellerLoginModel) {
         try {
             userService.sellerLogin(sellerLoginModel);
@@ -73,7 +73,7 @@ public class SellerController {
             System.out.println("inside seller controller");
             PropertyEntity user1Entity=userService.saveproperty(propertyModel, file);
             Map<String, Object> response = new HashMap<>();
-            response.put("message", "User registered successfully");
+            response.put("message", "property added successfully ");
             response.put("user", user1Entity);
             return ResponseEntity.ok(response);
         } catch (InputValidationFailedException e) {
