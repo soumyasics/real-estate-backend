@@ -54,6 +54,7 @@ public class SellerController {
     public ResponseEntity<?> sellerLogin(@Valid @RequestBody SellerLoginModel sellerLoginModel) {
         try {
             userService.sellerLogin(sellerLoginModel);
+
             return ResponseEntity.ok("Login Successfully");
         } catch (InputValidationFailedException e) {
             List<String> errors = e.getErrors();

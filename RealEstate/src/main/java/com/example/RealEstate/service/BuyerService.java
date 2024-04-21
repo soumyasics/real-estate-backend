@@ -19,7 +19,6 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 
 @Service
@@ -112,7 +111,7 @@ public class BuyerService {
         return userEntity;
     }
 
-    public void buyerLogin(BuyerLoginModel buyerLoginModel) {
+    public Long buyerLogin(BuyerLoginModel buyerLoginModel) {
         List<String> userError = new ArrayList<>();
         if (buyerLoginModel.getUsername() == null || buyerLoginModel.getUsername().isEmpty()) {
             userError.add("Username cannot be empty");
@@ -128,12 +127,15 @@ public class BuyerService {
             BuyerEntity buyerEntity = buyerRepository.findByUsernameAndPassword(buyerLoginModel.getUsername(), buyerLoginModel.getPassword());
             if (buyerEntity == null) {
                 userError.add("Invalid password");
+            }else {
+                return buyerEntity.getId();
             }
         }
 
         if (!userError.isEmpty()) {
             throw new InputValidationFailedException("Input validation failed", userError);
         }
+        return null;
     }
 
 

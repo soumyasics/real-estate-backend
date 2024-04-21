@@ -4,8 +4,7 @@ import com.example.RealEstate.entity.BuyerEntity;
 import com.example.RealEstate.entity.PropertyEntity;
 import com.example.RealEstate.entity.SellerEntity;
 import com.example.RealEstate.exception.InputValidationFailedException;
-import com.example.RealEstate.model.MessageRequestModel;
-import com.example.RealEstate.model.OrderModel;
+import com.example.RealEstate.model.*;
 import com.example.RealEstate.repository.BuyerRepository;
 import com.example.RealEstate.repository.PropertyRepository;
 import com.example.RealEstate.repository.SellerRepository;
@@ -18,7 +17,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
@@ -51,6 +52,33 @@ public class MessageController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
         }
         return ResponseEntity.ok("Ordered successfully");
+    }
+    @GetMapping("/orderListing")
+    public ResponseEntity<List<OrderListingModel>> orderListing() {
+        List<OrderListingModel> orderListing = messageRequestService.getAllOrders();
+        return ResponseEntity.ok(orderListing);
+    }
+    @GetMapping("/orderListingByBuyerId/{buyerId}")
+    public ResponseEntity<?> orderListingByBuyerId(@PathVariable("buyerId") Long buyerId) {
+        try {
+            List<OrderListByBuyerIdModel> orderListingByBuyerId = messageRequestService.getorderListingByBuyerId(buyerId);
+            return ResponseEntity.ok(orderListingByBuyerId);
+        } catch (InputValidationFailedException e) {
+            List<String> errors = e.getErrors();
+            String errorMessage = "{ error: { message: \"" + String.join(",", errors) + "\" } }";
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+        }
+    }
+
+    @GetMapping("/orderListingBySellerId/{sellerId}")
+    public ResponseEntity<List<OrderListBySellerIdModel>> orderListingBySellerId(@PathVariable("sellerId") Long sellerId){
+        List<OrderListBySellerIdModel> orderListingBySellerId = messageRequestService.getorderListingBySellerId(sellerId);
+        return ResponseEntity.ok(orderListingBySellerId);
+    }
+    @GetMapping("/orderListingByPropertyId/{propertyId}")
+    public ResponseEntity<List<OrderListByPropertyIdModel>> orderListingByPropertyId(@PathVariable("propertyId") Long propertyId){
+        List<OrderListByPropertyIdModel> orderListingByPropertyId = messageRequestService.getorderListingByPropertyId(propertyId);
+        return ResponseEntity.ok(orderListingByPropertyId);
     }
 }
 
