@@ -7,6 +7,8 @@ import com.example.RealEstate.model.BuyerUpdateModel;
 import com.example.RealEstate.model.SellerModel;
 import com.example.RealEstate.service.BuyerService;
 import com.example.RealEstate.service.SellerService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,27 +23,35 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/user")
+@CrossOrigin(origins = "http://localhost:3000")
 public class BuyerController {
     @Autowired
     private BuyerService buyerService;
 
     @PostMapping("/register")
-    public ResponseEntity<?> buyerRegistration(@Valid @ModelAttribute BuyerModel buyerModel, @RequestParam("file") MultipartFile file) {
+    public ResponseEntity<?> buyerRegistration(@Valid @ModelAttribute BuyerModel buyerModel,@RequestParam MultipartFile file) {
         try {
-            buyerService.saveUser(buyerModel, file);
+            buyerService.saveUser(buyerModel,file);
             Map<String, Object> response = new HashMap<>();
             response.put("message", "User registered successfully");
             response.put("user", buyerModel);
             return ResponseEntity.ok(response);
         } catch (InputValidationFailedException e) {
+            e.printStackTrace();
+
             List<String> errors = e.getErrors();
             String errorMessage = "{ error: { message: \"" + String.join(",", errors) + "\" } }";
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
         } catch (IOException e) {
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error");
         }
     }
+
 @GetMapping("/buyerloginbuyerlogin")
+
+@PostMapping("/buyerlogin")
+
     public ResponseEntity<?> buyerLogin(@Valid @RequestBody BuyerLoginModel buyerLoginModel) {
     try {
         buyerService.buyerLogin(buyerLoginModel);
@@ -77,5 +87,14 @@ public class BuyerController {
         throw new RuntimeException(e);
     }
 }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
+        return ResponseEntity.ok("Logout successful");
+    }
 
 }

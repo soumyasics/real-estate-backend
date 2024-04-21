@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/Seller")
+@CrossOrigin(origins = "http://localhost:3000")
 public class SellerController {
     @Autowired
     private SellerService userService;

@@ -1,6 +1,9 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="RealEstateApplication" type="Application" factoryName="Application" activateToolWindowBeforeRun="false">
-    <module name="RealEstate" />
+    <module name="real-estate-backend" />
+    <selectedOptions>
+      <option name="environmentVariables" visible="false" />
+    </selectedOptions>
     <option name="UNNAMED_CLASS_CONFIGURATION" value="true" />
     <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/RealEstate" />
     <method v="2">
