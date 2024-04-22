@@ -7,7 +7,7 @@ public class BuyerModel {
 
     private String firstname;
     private String lastname;
-    private int age;
+    private Integer age;
     private String dob;
     private String gender;
     private Long phone;
@@ -20,7 +20,7 @@ public class BuyerModel {
     public BuyerModel() {
     }
 
-    public BuyerModel(String firstname, String lastname, int age, String dob, String gender, Long phone, String email, String address, String username, String password, String profile) {
+    public BuyerModel(String firstname, String lastname, Integer age, String dob, String gender, Long phone, String email, String address, String username, String password, String profile) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.age = age;
@@ -50,11 +50,11 @@ public class BuyerModel {
         this.lastname = lastname;
     }
 
-    public int getAge() {
+    public Integer getAge() {
         return age;
     }
 
-    public void setAge(int age) {
+    public void setAge(Integer age) {
         this.age = age;
     }
 

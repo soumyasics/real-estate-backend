@@ -37,7 +37,7 @@ public class BuyerController {
             response.put("user", buyerModel);
             return ResponseEntity.ok(response);
         } catch (InputValidationFailedException e) {
-            e.printStackTrace();
+
 
             List<String> errors = e.getErrors();
             String errorMessage = "{ error: { message: \"" + String.join(",", errors) + "\" } }";
