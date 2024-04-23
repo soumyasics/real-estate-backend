@@ -48,7 +48,6 @@ public class BuyerController {
         }
     }
 
-@GetMapping("/buyerloginbuyerlogin")
 
 @PostMapping("/buyerlogin")
 
