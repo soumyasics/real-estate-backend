@@ -9,6 +9,12 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface OrderRepository extends JpaRepository<OrderEntity,Long> {
+    @Query("SELECT COUNT(o.buyerId) from OrderEntity o where o.buyerId=:buyerId")
+    int findByBuyerId(@Param("buyerId") Long buyerId);
+    @Query("SELECT COUNT(o.sellerId) from OrderEntity o where o.sellerId=:sellerId")
+    int findBySellerId(@Param("sellerId") Long sellerId);
+    @Query("SELECT COUNT(o.propertyId) from OrderEntity o where o.propertyId=:propertyId")
+    int findByPropertyId(@Param("propertyId") Long propertyId);
     @Query("SELECT new com.example.RealEstate.model.OrderListingModel(o.buyerId,o.sellerId,o.propertyId,o.price) " +
             "FROM OrderEntity o ")
     List<OrderListingModel> getAllOrders();

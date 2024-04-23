@@ -71,14 +71,26 @@ public class MessageController {
     }
 
     @GetMapping("/orderListingBySellerId/{sellerId}")
-    public ResponseEntity<List<OrderListBySellerIdModel>> orderListingBySellerId(@PathVariable("sellerId") Long sellerId){
-        List<OrderListBySellerIdModel> orderListingBySellerId = messageRequestService.getorderListingBySellerId(sellerId);
-        return ResponseEntity.ok(orderListingBySellerId);
+    public ResponseEntity<?> orderListingBySellerId(@PathVariable("sellerId") Long sellerId){
+        try {
+            List<OrderListBySellerIdModel> orderListingBySellerId = messageRequestService.getorderListingBySellerId(sellerId);
+            return ResponseEntity.ok(orderListingBySellerId);
+        } catch (InputValidationFailedException e) {
+            List<String> errors = e.getErrors();
+            String errorMessage = "{ error: { message: \"" + String.join(",", errors) + "\" } }";
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+        }
     }
     @GetMapping("/orderListingByPropertyId/{propertyId}")
-    public ResponseEntity<List<OrderListByPropertyIdModel>> orderListingByPropertyId(@PathVariable("propertyId") Long propertyId){
-        List<OrderListByPropertyIdModel> orderListingByPropertyId = messageRequestService.getorderListingByPropertyId(propertyId);
-        return ResponseEntity.ok(orderListingByPropertyId);
+    public ResponseEntity<?> orderListingByPropertyId(@PathVariable("propertyId") Long propertyId){
+        try {
+            List<OrderListByPropertyIdModel> orderListingByPropertyId = messageRequestService.getorderListingByPropertyId(propertyId);
+            return ResponseEntity.ok(orderListingByPropertyId);
+        }catch (InputValidationFailedException e) {
+            List<String> errors = e.getErrors();
+            String errorMessage = "{ error: { message: \"" + String.join(",", errors) + "\" } }";
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+        }
     }
 }
 

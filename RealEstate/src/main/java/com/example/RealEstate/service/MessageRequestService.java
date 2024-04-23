@@ -93,6 +93,10 @@ orderRepository.save(orderEntity);
         if (buyerId == null || buyerId ==0) {
             userError.add("BuyerId cannot be empty");
         }
+        int count=orderRepository.findByBuyerId(buyerId);
+        if(count==0){
+            userError.add("BuyerId not found");
+        }
         if (!userError.isEmpty()) {
             throw new InputValidationFailedException("Input validation failed", userError);
         }
@@ -100,11 +104,35 @@ orderRepository.save(orderEntity);
         return results;
     }
     public List<OrderListBySellerIdModel> getorderListingBySellerId(Long sellerId) {
+        List<String> userError = new ArrayList<>();
+
+        if (sellerId == null || sellerId ==0) {
+            userError.add("SellerId cannot be empty");
+        }
+        int count=orderRepository.findBySellerId(sellerId);
+        if(count==0){
+            userError.add("SellerId not found");
+        }
+        if (!userError.isEmpty()) {
+            throw new InputValidationFailedException("Input validation failed", userError);
+        }
         List<OrderListBySellerIdModel> results = orderRepository.getAllOrdersBySellerId(sellerId);
         return results;
     }
 
     public List<OrderListByPropertyIdModel> getorderListingByPropertyId(Long propertyId) {
+        List<String> userError = new ArrayList<>();
+
+        if (propertyId == null || propertyId ==0) {
+            userError.add("PropertyId cannot be empty");
+        }
+        int count=orderRepository.findByPropertyId(propertyId);
+        if(count==0){
+            userError.add("PropertyId not found");
+        }
+        if (!userError.isEmpty()) {
+            throw new InputValidationFailedException("Input validation failed", userError);
+        }
         List<OrderListByPropertyIdModel> results = orderRepository.getAllOrdersByPropertyId(propertyId);
         return results;
     }

@@ -35,7 +35,7 @@ public class SellerService {
     private  SellerRepository userRepository;
     @Autowired
     private PropertyRepository propertyRepository;
-    public  void sellerLogin(SellerLoginModel sellerLoginModel){
+    public Long sellerLogin(SellerLoginModel sellerLoginModel){
         List<String> userError = new ArrayList<>();
         if (sellerLoginModel.getUsername() == null || sellerLoginModel.getUsername().isEmpty()) {
             userError.add("Username cannot be empty");
@@ -52,11 +52,15 @@ public class SellerService {
             if (sellerEntity == null) {
                 userError.add("Invalid password");
             }
+            else {
+                return sellerEntity.getId();
+            }
         }
 
         if (!userError.isEmpty()) {
             throw new InputValidationFailedException("Input validation failed", userError);
         }
+        return null;
     }
 
 
