@@ -1,6 +1,7 @@
 package com.example.RealEstate.service;
 
 
+
 import com.example.RealEstate.entity.PropertyEntity;
 import com.example.RealEstate.entity.SellerEntity;
 import com.example.RealEstate.exception.InputValidationFailedException;
@@ -32,10 +33,11 @@ import java.util.Optional;
 public class SellerService {
 
     @Autowired
-    private  SellerRepository userRepository;
+    private SellerRepository userRepository;
     @Autowired
     private PropertyRepository propertyRepository;
-    public Long sellerLogin(SellerLoginModel sellerLoginModel){
+
+    public Long sellerLogin(SellerLoginModel sellerLoginModel) {
         List<String> userError = new ArrayList<>();
         if (sellerLoginModel.getUsername() == null || sellerLoginModel.getUsername().isEmpty()) {
             userError.add("Username cannot be empty");
@@ -51,8 +53,7 @@ public class SellerService {
             SellerEntity sellerEntity = userRepository.findByUsernameAndPassword(sellerLoginModel.getUsername(), sellerLoginModel.getPassword());
             if (sellerEntity == null) {
                 userError.add("Invalid password");
-            }
-            else {
+            } else {
                 return sellerEntity.getId();
             }
         }
@@ -62,7 +63,6 @@ public class SellerService {
         }
         return null;
     }
-
 
 
     public void saveUser(SellerModel sellerModel, MultipartFile file) throws IOException {
@@ -88,9 +88,7 @@ public class SellerService {
         String phoneNumber = String.valueOf(sellerModel.getPhone());
         if (!phoneNumber.matches("[0-9]+")) {
             userError.add("Phone number can only contain digits");
-        }
-
-        else if (StringUtils.isEmpty(sellerModel.getPhone()) || String.valueOf(sellerModel.getPhone()).length() != 10) {
+        } else if (StringUtils.isEmpty(sellerModel.getPhone()) || String.valueOf(sellerModel.getPhone()).length() != 10) {
             userError.add("Phone number must contain 10 digits");
         }
 
@@ -105,29 +103,29 @@ public class SellerService {
             throw new InputValidationFailedException("Input validation failed", userError);
         }
 
-       
+
 //     sellerRegister
 
         // Create a folder
-            File folder = new File("C:\\Users\\ajeen\\OneDrive\\Desktop\\realestate\\real-estate-backend\\sellerproimages");
-            if (!folder.exists()) {
-                folder.mkdirs();
-            }
+        File folder = new File("C:\\Users\\ajeen\\OneDrive\\Desktop\\realestate\\real-estate-backend\\sellerproimages");
+        if (!folder.exists()) {
+            folder.mkdirs();
+        }
 
-            // Save the image file to folder
-            String fileName = file.getOriginalFilename();
-            Path destination = Paths.get("C:\\Users\\ajeen\\OneDrive\\Desktop\\realestate\\real-estate-backend\\sellerproimages", fileName);
-            Files.copy(file.getInputStream(), destination, StandardCopyOption.REPLACE_EXISTING);
+        // Save the image file to folder
+        String fileName = file.getOriginalFilename();
+        Path destination = Paths.get("C:\\Users\\ajeen\\OneDrive\\Desktop\\realestate\\real-estate-backend\\sellerproimages", fileName);
+        Files.copy(file.getInputStream(), destination, StandardCopyOption.REPLACE_EXISTING);
 
-            // Set the profile picture path in the user entity
+        // Set the profile picture path in the user entity
         sellerModel.setProfile("sellerproimages/" + fileName);
 
         SellerEntity userEntity = getUserEntity(sellerModel);
 
-            userRepository.save(userEntity);
+        userRepository.save(userEntity);
 
 
-        }
+    }
 
     private static SellerEntity getUserEntity(SellerModel sellerModel) {
         SellerEntity userEntity = new SellerEntity();
@@ -145,11 +143,12 @@ public class SellerService {
 
         return userEntity;
     }
+
     private static PropertyEntity getPropertyEntity(PropertyModel propertyModel) {
         PropertyEntity userEntity = new PropertyEntity();
         userEntity.setSid(propertyModel.getSid());
         userEntity.setArea(propertyModel.getArea());
-        userEntity.setCity(propertyModel.getCity() );
+        userEntity.setCity(propertyModel.getCity());
         userEntity.setDistrict(propertyModel.getDistrict());
         userEntity.setFeatures(propertyModel.getFeatures());
         userEntity.setPrice(propertyModel.getPrice());
@@ -161,11 +160,12 @@ public class SellerService {
         userEntity.setPic(propertyModel.getPic());
         return userEntity;
     }
+
     public static PropertyModel getPropertyModel(PropertyEntity propertyentity) {
         PropertyModel userEntity = new PropertyModel();
         userEntity.setSid(propertyentity.getSid());
         userEntity.setArea(propertyentity.getArea());
-        userEntity.setCity(propertyentity.getCity() );
+        userEntity.setCity(propertyentity.getCity());
         userEntity.setDistrict(propertyentity.getDistrict());
         userEntity.setFeatures(propertyentity.getFeatures());
         userEntity.setPrice(propertyentity.getPrice());
@@ -178,25 +178,25 @@ public class SellerService {
         return userEntity;
     }
 
-    public String resetPass(String email, String password){
+    public String resetPass(String email, String password) {
 
         if (StringUtils.isEmpty(password)) {
             return "Password cannot be empty";
         }
 
-       String email1= String.valueOf(userRepository.findByEmail(email));
+        String email1 = String.valueOf(userRepository.findByEmail(email));
         Optional<SellerEntity> userOptional = Optional.ofNullable(userRepository.findByEmail(email));
-        if(email1.equals(null)){
+        if (email1.equals(null)) {
             return "Invalid email";
-        }
-        else{
+        } else {
 
-            SellerEntity user=userOptional.get() ;
+            SellerEntity user = userOptional.get();
             user.setPassword(password);
             userRepository.save(user);
         }
         return "Your password successfully updated.";
     }
+
     public PropertyEntity saveproperty(PropertyModel propertyModel, MultipartFile file) throws IOException {
         List<String> userError = new ArrayList<>();
 
@@ -215,7 +215,6 @@ public class SellerService {
         if (StringUtils.isEmpty(propertyModel.getPrice())) {
             userError.add("Price cannot be empty");
         }
-
 
 
 //     PropertyRegister
@@ -237,15 +236,16 @@ public class SellerService {
         PropertyEntity user1Entity = getPropertyEntity(propertyModel);
 
         propertyRepository.save(user1Entity);
-return user1Entity;
+        return user1Entity;
 
     }
-    public PropertyEntity updateProperty(Long id, PropertyModel propertyModel,MultipartFile file) {
-        PropertyEntity property=propertyRepository.findById(id)
-                .orElseThrow(()->
-                        new ResourceNotFoundException("Employee is not found:"+id));
+
+    public PropertyEntity updateProperty(Long id, PropertyModel propertyModel, MultipartFile file) {
+        PropertyEntity property = propertyRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Employee is not found:" + id));
         property.setArea(propertyModel.getArea());
-        property.setCity(propertyModel.getCity() );
+        property.setCity(propertyModel.getCity());
         property.setDistrict(propertyModel.getDistrict());
         property.setFeatures(propertyModel.getFeatures());
         property.setPrice(propertyModel.getPrice());
@@ -258,10 +258,11 @@ return user1Entity;
         PropertyEntity updatedpropertyobj = propertyRepository.save(property);
         return updatedpropertyobj;
     }
+
     public void deletePropertybyId(Long id) {
-        PropertyEntity propertyEntity=propertyRepository.findById(id)
-                .orElseThrow(()->
-                        new ResourceNotFoundException("Property is not found:"+id));
+        PropertyEntity propertyEntity = propertyRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Property is not found:" + id));
         propertyRepository.deleteById(id);
     }
 
@@ -273,12 +274,13 @@ return user1Entity;
 
 
     public PropertyAndSellerModel getPropertybyId(Long id) {
-        PropertyAndSellerModel property=propertyRepository.getPropertyAndSeller(id);
+        PropertyAndSellerModel property = propertyRepository.getPropertyAndSeller(id);
 
         return property;
     }
+
     public List<PropertyEntity> getPropertybySId(Long sid) {
-        List<PropertyEntity> properties=propertyRepository.findBySId(sid);
+        List<PropertyEntity> properties = propertyRepository.findBySId(sid);
 
         return properties;
     }
@@ -289,6 +291,37 @@ return user1Entity;
 
     public Long getPropertyId(Long id) {
         return id;
+    }
+
+    public SellerProfileViewModel profileView(Long id) {
+        List<String> userError = new ArrayList<>();
+        int count = userRepository.countById(id);
+        if (count == 0) {
+            userError.add("SellerId not found");
+        }
+        if (!userError.isEmpty()) {
+            throw new InputValidationFailedException("Input validation failed", userError);
+        }
+        Optional<SellerEntity> optionalSellerEntity = userRepository.findById(id);
+        if (optionalSellerEntity.isPresent()) {
+            SellerEntity sellerEntity = optionalSellerEntity.get();
+            SellerProfileViewModel sellerProfileViewModel = new SellerProfileViewModel();
+            sellerProfileViewModel.setFirstname(sellerEntity.getFirstname());
+            sellerProfileViewModel.setLastname(sellerEntity.getLastname());
+            sellerProfileViewModel.setAge(sellerEntity.getAge());
+            sellerProfileViewModel.setDob(sellerEntity.getDob());
+            sellerProfileViewModel.setGender(sellerEntity.getGender());
+            sellerProfileViewModel.setPhone(sellerEntity.getPhone());
+            sellerProfileViewModel.setEmail(sellerEntity.getEmail());
+            sellerProfileViewModel.setAddress(sellerEntity.getAddress());
+            sellerProfileViewModel.setUsername(sellerEntity.getUsername());
+            sellerProfileViewModel.setPassword(sellerEntity.getPassword());
+            sellerProfileViewModel.setProfile(sellerEntity.getProfile());
+
+            return sellerProfileViewModel;
+        }
+
+        return null;
     }
 }
 

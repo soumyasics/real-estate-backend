@@ -25,4 +25,6 @@ public interface SellerRepository extends JpaRepository<SellerEntity,Long> {
 
     @Query("SELECT COUNT(username) FROM SellerEntity e WHERE e.username = :username")
     int countByUsername(@Param("username") String username);
+    @Query("SELECT COUNT(id) FROM SellerEntity e WHERE e.id = :id")
+    int countById(Long id);
 }

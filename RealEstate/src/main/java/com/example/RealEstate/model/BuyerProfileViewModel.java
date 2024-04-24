@@ -1,44 +1,23 @@
-package com.example.RealEstate.entity;
+package com.example.RealEstate.model;
 
-import jakarta.persistence.*;
+public class BuyerProfileViewModel {
 
-
-@Entity
-@Table(name="user")
-
-public class BuyerEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id",nullable = false)
-    private Long id;
-    @Column(name = "firstname")
     private String firstname;
-    @Column(name = "lastname")
     private String lastname;
-    @Column(name = "age")
     private Integer age;
-  @Column (name = "dob")
-    private String  dob;
-    @Column(name = "gender")
+    private String dob;
     private String gender;
-    @Column(name = "phone")
     private Long phone;
-    @Column(name = "email")
     private String email;
-    @Column(name = "address")
     private String address;
-    @Column(name = "username")
     private String username;
-    @Column(name = "password")
     private String password;
-    @Column(name = "profile")
     private String profile;
 
-    public BuyerEntity() {
+    public BuyerProfileViewModel() {
     }
 
-    public BuyerEntity(Long id, String firstname, String lastname, int age, String dob, String gender, Long phone, String email, String address, String username, String password, String profile) {
-        this.id = id;
+    public BuyerProfileViewModel(String firstname, String lastname, Integer age, String dob, String gender, Long phone, String email, String address, String username, String password, String profile) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.age = age;
@@ -50,14 +29,6 @@ public class BuyerEntity {
         this.username = username;
         this.password = password;
         this.profile = profile;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getFirstname() {
