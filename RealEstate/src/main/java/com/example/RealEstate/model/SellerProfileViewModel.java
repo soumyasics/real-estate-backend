@@ -1,10 +1,6 @@
 package com.example.RealEstate.model;
 
-import javax.validation.constraints.NotBlank;
-
-public class BuyerModel {
-    @NotBlank(message = "First name is required")
-
+public class SellerProfileViewModel {
     private String firstname;
     private String lastname;
     private Integer age;
@@ -17,10 +13,10 @@ public class BuyerModel {
     private String password;
     private String profile;
 
-    public BuyerModel() {
+    public SellerProfileViewModel() {
     }
 
-    public BuyerModel(String firstname, String lastname, Integer age, String dob, String gender, Long phone, String email, String address, String username, String password, String profile) {
+    public SellerProfileViewModel(String firstname, String lastname, Integer age, String dob, String gender, Long phone, String email, String address, String username, String password, String profile) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.age = age;
@@ -118,9 +114,7 @@ public class BuyerModel {
         return profile;
     }
 
-    public String setProfile(String profile) {
+    public void setProfile(String profile) {
         this.profile = profile;
-        return profile;
     }
 }
-

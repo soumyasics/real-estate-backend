@@ -4,6 +4,7 @@ import com.example.RealEstate.entity.BuyerEntity;
 import com.example.RealEstate.exception.InputValidationFailedException;
 import com.example.RealEstate.model.BuyerLoginModel;
 import com.example.RealEstate.model.BuyerModel;
+import com.example.RealEstate.model.BuyerProfileViewModel;
 import com.example.RealEstate.model.BuyerUpdateModel;
 import com.example.RealEstate.repository.BuyerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -42,6 +44,9 @@ public class BuyerService {
         }
         if (StringUtils.isEmpty(buyerModel.getLastname())) {
             userError.add("Lastname cannot be empty");
+        }
+        if (buyerModel.getAge()==0 || buyerModel.getAge()==null) {
+            userError.add("Age cannot be empty");
         }
         if (StringUtils.isEmpty(buyerModel.getDob())) {
             userError.add("Dob cannot be empty");
@@ -203,7 +208,7 @@ public class BuyerService {
         }
 
         String fileName = file.getOriginalFilename();
-        Path destination = Paths.get("E:\\Estate\\real-estate-backend\\images", fileName);
+        Path destination = Paths.get("C:\\Users\\ajeen\\OneDrive\\Desktop\\realestate\\real-estate-backend\\images", fileName);
         Files.copy(file.getInputStream(), destination, StandardCopyOption.REPLACE_EXISTING);
 
         // Set the profile picture path in the user entity
@@ -222,7 +227,38 @@ public class BuyerService {
         buyerEntity.setProfile(buyerUpdateModel.getProfile());
         return  buyerRepository.save(buyerEntity);
     }
-}
+
+    public BuyerProfileViewModel profileView(Long id) {
+        List<String> userError = new ArrayList<>();
+        int count=buyerRepository.countById(id);
+        if(count==0){
+            userError.add("BuyerId not found");
+        }
+        if(!userError.isEmpty()){
+            throw new InputValidationFailedException("Input validation failed", userError);
+        }
+        Optional<BuyerEntity> optionalBuyerEntity = buyerRepository.findById(id);
+        if (optionalBuyerEntity.isPresent()) {
+            BuyerEntity buyerEntity = optionalBuyerEntity.get();
+            BuyerProfileViewModel buyerProfileViewModel = new BuyerProfileViewModel();
+            buyerProfileViewModel.setFirstname(buyerEntity.getFirstname());
+            buyerProfileViewModel.setLastname(buyerEntity.getLastname());
+            buyerProfileViewModel.setAge(buyerEntity.getAge());
+            buyerProfileViewModel.setDob(buyerEntity.getDob());
+            buyerProfileViewModel.setGender(buyerEntity.getGender());
+            buyerProfileViewModel.setPhone(buyerEntity.getPhone());
+            buyerProfileViewModel.setEmail(buyerEntity.getEmail());
+            buyerProfileViewModel.setAddress(buyerEntity.getAddress());
+            buyerProfileViewModel.setUsername(buyerEntity.getUsername());
+            buyerProfileViewModel.setPassword(buyerEntity.getPassword());
+            buyerProfileViewModel.setProfile(buyerEntity.getProfile());
+
+            return buyerProfileViewModel;
+        }
+
+        return null;
+    }
+    }
 
 
 

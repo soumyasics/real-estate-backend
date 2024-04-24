@@ -1,6 +1,7 @@
 package com.example.RealEstate.repository;
 
 import com.example.RealEstate.entity.BuyerEntity;
+import com.example.RealEstate.model.BuyerProfileViewModel;
 import jakarta.persistence.metamodel.SingularAttribute;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -25,6 +26,7 @@ public interface BuyerRepository extends JpaRepository<BuyerEntity,Long> {
     @Query("SELECT COUNT(email) FROM BuyerEntity e WHERE e.email = :email")
     int countByEmail(@Param("email") String email);
     BuyerEntity findByEmail(String email);
-
+    @Query("SELECT COUNT(id) FROM BuyerEntity e WHERE e.id = :id")
+    int countById(@Param("id") Long id);
 
 }
