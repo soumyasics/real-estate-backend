@@ -57,7 +57,7 @@ public class SellerController {
 Long sellerId=userService.sellerLogin(sellerLoginModel);
             Map<String, Object> response = new HashMap<>();
             response.put("message", "Login Successfully");
-            response.put("userId", sellerId);
+            response.put("sellerId", sellerId);
             return ResponseEntity.ok(response);
         } catch (InputValidationFailedException e) {
             List<String> errors = e.getErrors();

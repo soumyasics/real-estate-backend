@@ -208,7 +208,7 @@ public class BuyerService {
         }
 
         String fileName = file.getOriginalFilename();
-        Path destination = Paths.get("C:\\Users\\ajeen\\OneDrive\\Desktop\\realestate\\real-estate-backend\\images", fileName);
+        Path destination = Paths.get("E:\\Estate\\real-estate-backend\\images", fileName);
         Files.copy(file.getInputStream(), destination, StandardCopyOption.REPLACE_EXISTING);
 
         // Set the profile picture path in the user entity
