@@ -104,19 +104,19 @@ public class SellerService {
         }
 
 
-//     sellerRegister
+// Get the current working directory path
+        String currentPath = Paths.get("").toAbsolutePath().toString();
 
         // Create a folder
-        File folder = new File("C:\\Users\\ajeen\\OneDrive\\Desktop\\realestate\\real-estate-backend\\sellerproimages");
+        File folder = new File(currentPath + "/images");
         if (!folder.exists()) {
             folder.mkdirs();
         }
 
         // Save the image file to folder
         String fileName = file.getOriginalFilename();
-        Path destination = Paths.get("C:\\Users\\ajeen\\OneDrive\\Desktop\\realestate\\real-estate-backend\\sellerproimages", fileName);
+        Path destination = Paths.get(currentPath + "/images", fileName);
         Files.copy(file.getInputStream(), destination, StandardCopyOption.REPLACE_EXISTING);
-
         // Set the profile picture path in the user entity
         sellerModel.setProfile("sellerproimages/" + fileName);
 
@@ -217,17 +217,18 @@ public class SellerService {
         }
 
 
-//     PropertyRegister
+        // Get the current working directory path
+        String currentPath = Paths.get("").toAbsolutePath().toString();
 
         // Create a folder
-        File folder = new File("E:\\Estate\\real-estate-backend\\images");
+        File folder = new File(currentPath + "/images");
         if (!folder.exists()) {
             folder.mkdirs();
         }
 
         // Save the image file to folder
         String fileName = file.getOriginalFilename();
-        Path destination = Paths.get("E:\\Estate\\real-estate-backend\\images", fileName);
+        Path destination = Paths.get(currentPath + "/images", fileName);
         Files.copy(file.getInputStream(), destination, StandardCopyOption.REPLACE_EXISTING);
 
         // Set the profile picture path in the user entity
