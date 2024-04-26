@@ -1,13 +1,11 @@
 package com.example.RealEstate.repository;
 
-import com.example.RealEstate.entity.BuyerEntity;
-import com.example.RealEstate.entity.PropertyEntity;
 import com.example.RealEstate.entity.SellerEntity;
-import com.example.RealEstate.model.SellerModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -25,4 +23,5 @@ public interface SellerRepository extends JpaRepository<SellerEntity,Long> {
 
     @Query("SELECT COUNT(username) FROM SellerEntity e WHERE e.username = :username")
     int countByUsername(@Param("username") String username);
+
 }

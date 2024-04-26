@@ -105,8 +105,10 @@ public class SellerService {
 //     sellerRegister
 
         // Create a folder
-            File folder = new File("E:\\test1\\real-estate-backend\\sellerproimages");
-            if (!folder.exists()) {
+           // File folder = new File("E:\\test1\\real-estate-backend\\sellerproimages");
+        File folder = new File("../sellerimages");
+
+        if (!folder.exists()) {
                 folder.mkdirs();
             }
 
@@ -192,6 +194,70 @@ public class SellerService {
             userRepository.save(user);
         }
         return "Your password successfully updated.";
+    }
+
+    public SellerEntity updateSeller(Long id, SellerUpdateModel sellerUpdateModel, MultipartFile file) throws IOException {
+        List<String> userError = new ArrayList<>();
+
+
+        if (StringUtils.isEmpty(sellerUpdateModel.getFirstname())) {
+            userError.add("Firstname cannot be empty");
+        }
+        if (StringUtils.isEmpty(sellerUpdateModel.getLastname())) {
+            userError.add("Lastname cannot be empty");
+        }
+        if (StringUtils.isEmpty(sellerUpdateModel.getDob())) {
+            userError.add("Dob cannot be empty");
+        }
+        if (StringUtils.isEmpty(sellerUpdateModel.getGender())) {
+            userError.add("Gender cannot be empty");
+        }
+        String phoneNumber = String.valueOf(sellerUpdateModel.getPhone());
+        if (!phoneNumber.matches("[0-9]+")) {
+            userError.add("Phone number can only contain digits");
+        } else if (StringUtils.isEmpty(sellerUpdateModel.getPhone()) || String.valueOf(sellerUpdateModel.getPhone()).length() != 10) {
+            userError.add("Phone number must contain 10 digits");
+        }
+
+        if (StringUtils.isEmpty(sellerUpdateModel.getAddress())) {
+            userError.add("Address cannot be empty");
+        }
+        if (StringUtils.isEmpty(sellerUpdateModel.getUsername())) {
+            userError.add("Username cannot be empty");
+        }
+        if (StringUtils.isEmpty(sellerUpdateModel.getEmail())) {
+            userError.add("Email cannot be empty");
+        }
+        if (file == null || file.isEmpty()) {
+            userError.add("File is required");
+        }
+        if (!userError.isEmpty()) {
+            throw new InputValidationFailedException("Input validation failed", userError);
+        }
+
+        String fileName = file.getOriginalFilename();
+        Path destination = Paths.get("E:\\Estate\\real-estate-backend\\images", fileName);
+        Files.copy(file.getInputStream(), destination, StandardCopyOption.REPLACE_EXISTING);
+
+        // Set the profile picture path in the user entity
+        sellerUpdateModel.setProfile("images/" + fileName);
+
+        SellerEntity sellerEntity =userRepository.findById(id).orElseThrow(()-> new InputValidationFailedException("Id not exist",userError));
+        sellerEntity.setFirstname(sellerUpdateModel.getFirstname());
+        sellerEntity.setLastname(sellerUpdateModel.getLastname());
+        sellerEntity.setAge(sellerUpdateModel.getAge());
+        sellerEntity.setDob(sellerUpdateModel.getDob());
+        sellerEntity.setGender(sellerUpdateModel.getGender());
+        sellerEntity.setPhone(sellerUpdateModel.getPhone());
+        sellerEntity.setEmail(sellerUpdateModel.getEmail());
+        sellerEntity.setUsername(sellerUpdateModel.getUsername());
+        sellerEntity.setAddress(sellerUpdateModel.getAddress());
+        sellerEntity.setProfile(sellerUpdateModel.getProfile());
+        return  userRepository.save(sellerEntity);
+    }
+    public List<SellerEntity> getAllSellers() {
+        List<SellerEntity> results = userRepository.findAll();
+        return results;
     }
     public PropertyEntity saveproperty(PropertyModel propertyModel, MultipartFile file) throws IOException {
         List<String> userError = new ArrayList<>();
@@ -287,4 +353,5 @@ return user1Entity;
         return id;
     }
 }
+
 
