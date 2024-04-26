@@ -16,7 +16,7 @@ public class BuyerEntity {
     @Column(name = "lastname")
     private String lastname;
     @Column(name = "age")
-    private int age;
+    private Integer age;
   @Column (name = "dob")
     private String  dob;
     @Column(name = "gender")
@@ -76,11 +76,11 @@ public class BuyerEntity {
         this.lastname = lastname;
     }
 
-    public int getAge() {
+    public Integer getAge() {
         return age;
     }
 
-    public void setAge(int age) {
+    public void setAge(Integer age) {
         this.age = age;
     }
 

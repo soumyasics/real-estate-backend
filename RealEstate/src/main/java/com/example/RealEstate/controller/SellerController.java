@@ -56,7 +56,11 @@ public class SellerController {
     public ResponseEntity<?> sellerLogin(@Valid @RequestBody SellerLoginModel sellerLoginModel) {
         try {
             userService.sellerLogin(sellerLoginModel);
-            return ResponseEntity.ok("Login Successfully");
+Long sellerId=userService.sellerLogin(sellerLoginModel);
+            Map<String, Object> response = new HashMap<>();
+            response.put("message", "Login Successfully");
+            response.put("sellerId", sellerId);
+            return ResponseEntity.ok(response);
         } catch (InputValidationFailedException e) {
             List<String> errors = e.getErrors();
             String errorMessage = "{ error: { message: \"" + String.join(",", errors) + "\" } }";
@@ -152,6 +156,17 @@ public class SellerController {
         //List<User> users = userService.getUsersByCondition(condition);
         return new ResponseEntity<>(savedProperty, HttpStatus.OK);
 
+    }
+    @GetMapping("/profileView/{id}")
+    public ResponseEntity<?> profileView(@PathVariable("id") Long id) {
+        try {
+            SellerProfileViewModel profile = userService.profileView(id);
+            return ResponseEntity.ok(profile);
+        } catch (InputValidationFailedException e) {
+            List<String> errors = e.getErrors();
+            String errorMessage = "{ error: { message: \"" + String.join(",", errors) + "\" } }";
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+        }
     }
 
 }

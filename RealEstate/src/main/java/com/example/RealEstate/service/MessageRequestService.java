@@ -4,8 +4,7 @@ import com.example.RealEstate.entity.MessageRequestEntity;
 import com.example.RealEstate.entity.OrderEntity;
 import com.example.RealEstate.entity.SellerEntity;
 import com.example.RealEstate.exception.InputValidationFailedException;
-import com.example.RealEstate.model.MessageRequestModel;
-import com.example.RealEstate.model.OrderModel;
+import com.example.RealEstate.model.*;
 import com.example.RealEstate.repository.MessageRepository;
 import com.example.RealEstate.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,5 +80,60 @@ private OrderRepository orderRepository;
         orderEntity.setPropertyId(orderModel.getPropertyId());
         orderEntity.setPrice(orderModel.getPrice());
 orderRepository.save(orderEntity);
+    }
+
+    public List<OrderListingModel> getAllOrders() {
+        List<OrderListingModel> results = orderRepository.getAllOrders();
+        return results;
+    }
+
+    public List<OrderListByBuyerIdModel> getorderListingByBuyerId(Long buyerId) {
+        List<String> userError = new ArrayList<>();
+
+        if (buyerId == null || buyerId ==0) {
+            userError.add("BuyerId cannot be empty");
+        }
+        int count=orderRepository.findByBuyerId(buyerId);
+        if(count==0){
+            userError.add("BuyerId not found");
+        }
+        if (!userError.isEmpty()) {
+            throw new InputValidationFailedException("Input validation failed", userError);
+        }
+        List<OrderListByBuyerIdModel> results = orderRepository.getAllOrdersByBuyerId(buyerId);
+        return results;
+    }
+    public List<OrderListBySellerIdModel> getorderListingBySellerId(Long sellerId) {
+        List<String> userError = new ArrayList<>();
+
+        if (sellerId == null || sellerId ==0) {
+            userError.add("SellerId cannot be empty");
+        }
+        int count=orderRepository.findBySellerId(sellerId);
+        if(count==0){
+            userError.add("SellerId not found");
+        }
+        if (!userError.isEmpty()) {
+            throw new InputValidationFailedException("Input validation failed", userError);
+        }
+        List<OrderListBySellerIdModel> results = orderRepository.getAllOrdersBySellerId(sellerId);
+        return results;
+    }
+
+    public List<OrderListByPropertyIdModel> getorderListingByPropertyId(Long propertyId) {
+        List<String> userError = new ArrayList<>();
+
+        if (propertyId == null || propertyId ==0) {
+            userError.add("PropertyId cannot be empty");
+        }
+        int count=orderRepository.findByPropertyId(propertyId);
+        if(count==0){
+            userError.add("PropertyId not found");
+        }
+        if (!userError.isEmpty()) {
+            throw new InputValidationFailedException("Input validation failed", userError);
+        }
+        List<OrderListByPropertyIdModel> results = orderRepository.getAllOrdersByPropertyId(propertyId);
+        return results;
     }
 }

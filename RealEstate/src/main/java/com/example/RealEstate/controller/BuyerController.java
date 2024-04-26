@@ -1,12 +1,8 @@
 package com.example.RealEstate.controller;
 
 import com.example.RealEstate.exception.InputValidationFailedException;
-import com.example.RealEstate.model.BuyerLoginModel;
-import com.example.RealEstate.model.BuyerModel;
-import com.example.RealEstate.model.BuyerUpdateModel;
-import com.example.RealEstate.model.SellerModel;
+import com.example.RealEstate.model.*;
 import com.example.RealEstate.service.BuyerService;
-import com.example.RealEstate.service.SellerService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +33,7 @@ public class BuyerController {
             response.put("user", buyerModel);
             return ResponseEntity.ok(response);
         } catch (InputValidationFailedException e) {
-            e.printStackTrace();
+
 
             List<String> errors = e.getErrors();
             String errorMessage = "{ error: { message: \"" + String.join(",", errors) + "\" } }";
@@ -55,7 +51,11 @@ public class BuyerController {
     public ResponseEntity<?> buyerLogin(@Valid @RequestBody BuyerLoginModel buyerLoginModel) {
     try {
         buyerService.buyerLogin(buyerLoginModel);
-        return ResponseEntity.ok("Login Successfully");
+        Long userId = buyerService.buyerLogin(buyerLoginModel);
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "Login Successfully");
+        response.put("userId", userId);
+        return ResponseEntity.ok(response);
     } catch (InputValidationFailedException e) {
         List<String> errors = e.getErrors();
         String errorMessage = "{ error: { message: \"" + String.join(",", errors) + "\" } }";
@@ -88,6 +88,21 @@ public class BuyerController {
     }
 }
 
+
+
+    @GetMapping("/profileView/{id}")
+    public ResponseEntity<?> profileView(@PathVariable("id") Long id) {
+        try {
+            BuyerProfileViewModel profile = buyerService.profileView(id);
+            return ResponseEntity.ok(profile);
+        } catch (InputValidationFailedException e) {
+            List<String> errors = e.getErrors();
+            String errorMessage = "{ error: { message: \"" + String.join(",", errors) + "\" } }";
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+        }
+    }
+
+
     @PostMapping("/logout")
     public ResponseEntity<?> logout(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
@@ -98,3 +113,5 @@ public class BuyerController {
     }
 
 }
+
+

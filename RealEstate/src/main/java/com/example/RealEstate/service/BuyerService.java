@@ -4,6 +4,7 @@ import com.example.RealEstate.entity.BuyerEntity;
 import com.example.RealEstate.exception.InputValidationFailedException;
 import com.example.RealEstate.model.BuyerLoginModel;
 import com.example.RealEstate.model.BuyerModel;
+import com.example.RealEstate.model.BuyerProfileViewModel;
 import com.example.RealEstate.model.BuyerUpdateModel;
 import com.example.RealEstate.repository.BuyerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +45,9 @@ public class BuyerService {
         if (StringUtils.isEmpty(buyerModel.getLastname())) {
             userError.add("Lastname cannot be empty");
         }
+        if (buyerModel.getAge()==0 || buyerModel.getAge()==null) {
+            userError.add("Age cannot be empty");
+        }
         if (StringUtils.isEmpty(buyerModel.getDob())) {
             userError.add("Dob cannot be empty");
         }
@@ -73,15 +77,18 @@ public class BuyerService {
         }
 
 
+        // Get the current working directory path
+        String currentPath = Paths.get("").toAbsolutePath().toString();
+
         // Create a folder
-        File folder = new File("E:\\Estate\\real-estate-backend\\images");
+        File folder = new File(currentPath + "/images");
         if (!folder.exists()) {
             folder.mkdirs();
         }
 
         // Save the image file to folder
         String fileName = file.getOriginalFilename();
-        Path destination = Paths.get("E:\\Estate\\real-estate-backend\\images", fileName);
+        Path destination = Paths.get(currentPath + "/images", fileName);
         Files.copy(file.getInputStream(), destination, StandardCopyOption.REPLACE_EXISTING);
 
         // Set the profile picture path in the user entity
@@ -112,7 +119,7 @@ public class BuyerService {
         return userEntity;
     }
 
-    public void buyerLogin(BuyerLoginModel buyerLoginModel) {
+    public Long buyerLogin(BuyerLoginModel buyerLoginModel) {
         List<String> userError = new ArrayList<>();
         if (buyerLoginModel.getUsername() == null || buyerLoginModel.getUsername().isEmpty()) {
             userError.add("Username cannot be empty");
@@ -128,12 +135,15 @@ public class BuyerService {
             BuyerEntity buyerEntity = buyerRepository.findByUsernameAndPassword(buyerLoginModel.getUsername(), buyerLoginModel.getPassword());
             if (buyerEntity == null) {
                 userError.add("Invalid password");
+            }else {
+                return buyerEntity.getId();
             }
         }
 
         if (!userError.isEmpty()) {
             throw new InputValidationFailedException("Input validation failed", userError);
         }
+        return null;
     }
 
 
@@ -196,13 +206,29 @@ public class BuyerService {
         if (file == null || file.isEmpty()) {
             userError.add("File is required");
         }
+        int count=buyerRepository.countById(id);
+        if(count == 0){
+            userError.add("BuyerId not found");
+        }
         if (!userError.isEmpty()) {
             throw new InputValidationFailedException("Input validation failed", userError);
         }
 
+        // Get the current working directory path
+        String currentPath = Paths.get("").toAbsolutePath().toString();
+
+        // Create the images directory if it doesn't exist
+        File folder = new File(currentPath + "/images");
+        if (!folder.exists()) {
+            folder.mkdirs();
+        }
+
+        // Save the image file to the images directory
         String fileName = file.getOriginalFilename();
-        Path destination = Paths.get("E:\\Estate\\real-estate-backend\\images", fileName);
+        Path destination = Paths.get(currentPath + "/images", fileName);
         Files.copy(file.getInputStream(), destination, StandardCopyOption.REPLACE_EXISTING);
+
+
 
         // Set the profile picture path in the user entity
         buyerUpdateModel.setProfile("images/" + fileName);
@@ -220,7 +246,38 @@ public class BuyerService {
         buyerEntity.setProfile(buyerUpdateModel.getProfile());
         return  buyerRepository.save(buyerEntity);
     }
-}
+
+    public BuyerProfileViewModel profileView(Long id) {
+        List<String> userError = new ArrayList<>();
+        int count=buyerRepository.countById(id);
+        if(count==0){
+            userError.add("BuyerId not found");
+        }
+        if(!userError.isEmpty()){
+            throw new InputValidationFailedException("Input validation failed", userError);
+        }
+        Optional<BuyerEntity> optionalBuyerEntity = buyerRepository.findById(id);
+        if (optionalBuyerEntity.isPresent()) {
+            BuyerEntity buyerEntity = optionalBuyerEntity.get();
+            BuyerProfileViewModel buyerProfileViewModel = new BuyerProfileViewModel();
+            buyerProfileViewModel.setFirstname(buyerEntity.getFirstname());
+            buyerProfileViewModel.setLastname(buyerEntity.getLastname());
+            buyerProfileViewModel.setAge(buyerEntity.getAge());
+            buyerProfileViewModel.setDob(buyerEntity.getDob());
+            buyerProfileViewModel.setGender(buyerEntity.getGender());
+            buyerProfileViewModel.setPhone(buyerEntity.getPhone());
+            buyerProfileViewModel.setEmail(buyerEntity.getEmail());
+            buyerProfileViewModel.setAddress(buyerEntity.getAddress());
+            buyerProfileViewModel.setUsername(buyerEntity.getUsername());
+            buyerProfileViewModel.setPassword(buyerEntity.getPassword());
+            buyerProfileViewModel.setProfile(buyerEntity.getProfile());
+
+            return buyerProfileViewModel;
+        }
+
+        return null;
+    }
+    }
 
 
 
