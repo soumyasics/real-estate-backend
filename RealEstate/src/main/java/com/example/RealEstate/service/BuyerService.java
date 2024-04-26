@@ -77,15 +77,18 @@ public class BuyerService {
         }
 
 
+        // Get the current working directory path
+        String currentPath = Paths.get("").toAbsolutePath().toString();
+
         // Create a folder
-        File folder = new File("E:\\Estate\\real-estate-backend\\images");
+        File folder = new File(currentPath + "/images");
         if (!folder.exists()) {
             folder.mkdirs();
         }
 
         // Save the image file to folder
         String fileName = file.getOriginalFilename();
-        Path destination = Paths.get("E:\\Estate\\real-estate-backend\\images", fileName);
+        Path destination = Paths.get(currentPath + "/images", fileName);
         Files.copy(file.getInputStream(), destination, StandardCopyOption.REPLACE_EXISTING);
 
         // Set the profile picture path in the user entity
@@ -203,13 +206,29 @@ public class BuyerService {
         if (file == null || file.isEmpty()) {
             userError.add("File is required");
         }
+        int count=buyerRepository.countById(id);
+        if(count == 0){
+            userError.add("BuyerId not found");
+        }
         if (!userError.isEmpty()) {
             throw new InputValidationFailedException("Input validation failed", userError);
         }
 
+        // Get the current working directory path
+        String currentPath = Paths.get("").toAbsolutePath().toString();
+
+        // Create the images directory if it doesn't exist
+        File folder = new File(currentPath + "/images");
+        if (!folder.exists()) {
+            folder.mkdirs();
+        }
+
+        // Save the image file to the images directory
         String fileName = file.getOriginalFilename();
-        Path destination = Paths.get("E:\\Estate\\real-estate-backend\\images", fileName);
+        Path destination = Paths.get(currentPath + "/images", fileName);
         Files.copy(file.getInputStream(), destination, StandardCopyOption.REPLACE_EXISTING);
+
+
 
         // Set the profile picture path in the user entity
         buyerUpdateModel.setProfile("images/" + fileName);
