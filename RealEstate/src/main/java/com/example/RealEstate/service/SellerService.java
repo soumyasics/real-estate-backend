@@ -232,7 +232,7 @@ public class SellerService {
         Files.copy(file.getInputStream(), destination, StandardCopyOption.REPLACE_EXISTING);
 
         // Set the profile picture path in the user entity
-        propertyModel.setPic("propertyimages/" + fileName);
+        propertyModel.setPic("images/" + fileName);
 
         PropertyEntity user1Entity = getPropertyEntity(propertyModel);
 
