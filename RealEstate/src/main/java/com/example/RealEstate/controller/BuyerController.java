@@ -75,9 +75,9 @@ public class BuyerController {
         }
 }
 @PutMapping("/updateBuyer/{id}")
-    public ResponseEntity<String> updateBuyer(@PathVariable("id") Long id,@Valid @ModelAttribute BuyerUpdateModel buyerUpdateModel,@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<String> updateBuyer(@PathVariable("id") Long id,@Valid @ModelAttribute BuyerUpdateModel buyerUpdateModel) {
     try {
-        buyerService.updateBuyer(id,buyerUpdateModel,file);
+        buyerService.updateBuyer(id,buyerUpdateModel);
         return ResponseEntity.ok("update successfully");
     } catch (InputValidationFailedException e) {
         List<String> errors = e.getErrors();

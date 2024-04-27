@@ -171,7 +171,7 @@ public class BuyerService {
         }
     }
 
-    public BuyerEntity updateBuyer(Long id,BuyerUpdateModel buyerUpdateModel, MultipartFile file) throws IOException {
+    public BuyerEntity updateBuyer(Long id,BuyerUpdateModel buyerUpdateModel) throws IOException {
         List<String> userError = new ArrayList<>();
 
 
@@ -203,9 +203,7 @@ public class BuyerService {
         if (StringUtils.isEmpty(buyerUpdateModel.getEmail())) {
             userError.add("Email cannot be empty");
         }
-        if (file == null || file.isEmpty()) {
-            userError.add("File is required");
-        }
+
         int count=buyerRepository.countById(id);
         if(count == 0){
             userError.add("BuyerId not found");
@@ -214,24 +212,7 @@ public class BuyerService {
             throw new InputValidationFailedException("Input validation failed", userError);
         }
 
-        // Get the current working directory path
-        String currentPath = Paths.get("").toAbsolutePath().toString();
 
-        // Create the images directory if it doesn't exist
-        File folder = new File(currentPath + "/images");
-        if (!folder.exists()) {
-            folder.mkdirs();
-        }
-
-        // Save the image file to the images directory
-        String fileName = file.getOriginalFilename();
-        Path destination = Paths.get(currentPath + "/images", fileName);
-        Files.copy(file.getInputStream(), destination, StandardCopyOption.REPLACE_EXISTING);
-
-
-
-        // Set the profile picture path in the user entity
-        buyerUpdateModel.setProfile("images/" + fileName);
 
         BuyerEntity buyerEntity =buyerRepository.findById(id).orElseThrow(()-> new InputValidationFailedException("Id not exist",userError));
         buyerEntity.setFirstname(buyerUpdateModel.getFirstname());
@@ -243,7 +224,7 @@ public class BuyerService {
         buyerEntity.setEmail(buyerUpdateModel.getEmail());
         buyerEntity.setUsername(buyerUpdateModel.getUsername());
         buyerEntity.setAddress(buyerUpdateModel.getAddress());
-        buyerEntity.setProfile(buyerUpdateModel.getProfile());
+
         return  buyerRepository.save(buyerEntity);
     }
 
