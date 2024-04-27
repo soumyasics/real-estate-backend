@@ -107,14 +107,6 @@ public class SellerService {
 // Get the current working directory path
         String currentPath = Paths.get("").toAbsolutePath().toString();
 
-        // Create a folder
-
-           // File folder = new File("E:\\test1\\real-estate-backend\\sellerproimages");
-//        File folder = new File("../sellerimages");
-//
-//        if (!folder.exists()) {
-//                folder.mkdirs();
-//            }
 
         File folder = new File(currentPath + "/images");
         if (!folder.exists()) {
@@ -207,7 +199,7 @@ public class SellerService {
     }
 
 
-    public SellerEntity updateSeller(Long id, SellerUpdateModel sellerUpdateModel, MultipartFile file) throws IOException {
+    public SellerEntity updateSeller(Long id, SellerUpdateModel sellerUpdateModel) throws IOException {
         List<String> userError = new ArrayList<>();
 
 
@@ -239,19 +231,11 @@ public class SellerService {
         if (StringUtils.isEmpty(sellerUpdateModel.getEmail())) {
             userError.add("Email cannot be empty");
         }
-        if (file == null || file.isEmpty()) {
-            userError.add("File is required");
-        }
+
         if (!userError.isEmpty()) {
             throw new InputValidationFailedException("Input validation failed", userError);
         }
 
-        String fileName = file.getOriginalFilename();
-        Path destination = Paths.get("E:\\Estate\\real-estate-backend\\images", fileName);
-        Files.copy(file.getInputStream(), destination, StandardCopyOption.REPLACE_EXISTING);
-
-        // Set the profile picture path in the user entity
-        sellerUpdateModel.setProfile("images/" + fileName);
 
         SellerEntity sellerEntity =userRepository.findById(id).orElseThrow(()-> new InputValidationFailedException("Id not exist",userError));
         sellerEntity.setFirstname(sellerUpdateModel.getFirstname());

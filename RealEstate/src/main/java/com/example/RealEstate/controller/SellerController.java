@@ -72,9 +72,9 @@ Long sellerId=userService.sellerLogin(sellerLoginModel);
         return userService.resetPass(email,password);
     }
     @PutMapping("/updateSeller/{id}")
-    public ResponseEntity<String> updateSeller(@PathVariable("id") Long id,@Valid @ModelAttribute SellerUpdateModel sellerUpdateModel,@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<String> updateSeller(@PathVariable("id") Long id,@Valid @ModelAttribute SellerUpdateModel sellerUpdateModel) {
         try {
-            userService.updateSeller(id,sellerUpdateModel,file);
+            userService.updateSeller(id,sellerUpdateModel);
             return ResponseEntity.ok("update successfully");
         } catch (InputValidationFailedException e) {
             List<String> errors = e.getErrors();
