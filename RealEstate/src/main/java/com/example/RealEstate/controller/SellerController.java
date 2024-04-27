@@ -50,6 +50,8 @@ public class SellerController {
 
     }
 
+
+
     @PostMapping("/sellerlogin")
     public ResponseEntity<?> sellerLogin(@Valid @RequestBody SellerLoginModel sellerLoginModel) {
         try {
@@ -68,6 +70,26 @@ Long sellerId=userService.sellerLogin(sellerLoginModel);
     @PutMapping("/resetSeller-password")
     public String resetPass(@RequestParam String email, @RequestParam String password){
         return userService.resetPass(email,password);
+    }
+    @PutMapping("/updateSeller/{id}")
+    public ResponseEntity<String> updateSeller(@PathVariable("id") Long id,@Valid @ModelAttribute SellerUpdateModel sellerUpdateModel,@RequestParam("file") MultipartFile file) {
+        try {
+            userService.updateSeller(id,sellerUpdateModel,file);
+            return ResponseEntity.ok("update successfully");
+        } catch (InputValidationFailedException e) {
+            List<String> errors = e.getErrors();
+            String errorMessage = "{ error: { message: \"" + String.join(",", errors) + "\" } }";
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @GetMapping("/sellerListing")
+    public ResponseEntity<List<SellerEntity>> sellerListing(){
+        List<SellerEntity> sellers= userService.getAllSellers();
+        return ResponseEntity.ok(sellers);
+
     }
 
     @PostMapping("/AddProperty")
