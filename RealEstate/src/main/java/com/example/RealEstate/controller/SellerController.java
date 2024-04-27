@@ -85,12 +85,7 @@ Long sellerId=userService.sellerLogin(sellerLoginModel);
         }
     }
 
-    @GetMapping("/sellerListing")
-    public ResponseEntity<List<SellerEntity>> sellerListing(){
-        List<SellerEntity> sellers= userService.getAllSellers();
-        return ResponseEntity.ok(sellers);
 
-    }
 
     @PostMapping("/AddProperty")
     public ResponseEntity<?> propertyRegistration(@Valid @ModelAttribute PropertyModel propertyModel, @RequestParam("file") MultipartFile file) {
