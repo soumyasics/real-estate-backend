@@ -250,10 +250,6 @@ public class SellerService {
         sellerEntity.setProfile(sellerUpdateModel.getProfile());
         return  userRepository.save(sellerEntity);
     }
-    public List<SellerEntity> getAllSellers() {
-        List<SellerEntity> results = userRepository.findAll();
-        return results;
-    }
 
     public PropertyEntity saveproperty(PropertyModel propertyModel, MultipartFile file) throws IOException {
         List<String> userError = new ArrayList<>();
