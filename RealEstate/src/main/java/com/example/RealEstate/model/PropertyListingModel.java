@@ -1,6 +1,8 @@
 package com.example.RealEstate.model;
 
 public class PropertyListingModel {
+    private Long propertyId;
+    private Long sellerId;
     private String pic;
     private Double lat;
     private Double log;
@@ -17,7 +19,9 @@ public class PropertyListingModel {
     public PropertyListingModel() {
     }
 
-    public PropertyListingModel(String pic, Double lat, Double log, String district, String city, String type, String landmark, String features, Integer price, String area, String sellerName, String sellerEmail) {
+    public PropertyListingModel(Long propertyId, Long sellerId, String pic, Double lat, Double log, String district, String city, String type, String landmark, String features, Integer price, String area, String sellerName, String sellerEmail) {
+        this.propertyId = propertyId;
+        this.sellerId = sellerId;
         this.pic = pic;
         this.lat = lat;
         this.log = log;
@@ -30,6 +34,22 @@ public class PropertyListingModel {
         this.area = area;
         this.sellerName = sellerName;
         this.sellerEmail = sellerEmail;
+    }
+
+    public Long getPropertyId() {
+        return propertyId;
+    }
+
+    public void setPropertyId(Long propertyId) {
+        this.propertyId = propertyId;
+    }
+
+    public Long getSellerId() {
+        return sellerId;
+    }
+
+    public void setSellerId(Long sellerId) {
+        this.sellerId = sellerId;
     }
 
     public String getPic() {
@@ -48,11 +68,11 @@ public class PropertyListingModel {
         this.lat = lat;
     }
 
-    public Double getlog() {
+    public Double getLog() {
         return log;
     }
 
-    public void setlog(Double log) {
+    public void setLog(Double log) {
         this.log = log;
     }
 

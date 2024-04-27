@@ -25,7 +25,7 @@ public interface PropertyRepository extends JpaRepository<PropertyEntity,Long> {
     @Query("SELECT e FROM PropertyEntity e WHERE e.sid = :id ")
     List<PropertyEntity> findBySId(Long id);
 
-    @Query("SELECT new com.example.RealEstate.model.PropertyListingModel(p.pic, p.lat, p.log, p.district, p.city, p.type, p.landmark, p.features, p.price, p.area, s.firstname, s.email) " +
+    @Query("SELECT new com.example.RealEstate.model.PropertyListingModel(p.id,p.sid,p.pic, p.lat, p.log, p.district, p.city, p.type, p.landmark, p.features, p.price, p.area, s.firstname, s.email) " +
             "FROM PropertyEntity p " +
             "JOIN SellerEntity s ON p.sid = s.id")
     List<PropertyListingModel> getAllProperties();
