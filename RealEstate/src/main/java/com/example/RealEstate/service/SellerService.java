@@ -127,7 +127,7 @@ public class SellerService {
         Path destination = Paths.get(currentPath + "/images", fileName);
         Files.copy(file.getInputStream(), destination, StandardCopyOption.REPLACE_EXISTING);
         // Set the profile picture path in the user entity
-        sellerModel.setProfile("sellerproimages/" + fileName);
+        sellerModel.setProfile("images/" + fileName);
 
         SellerEntity userEntity = getUserEntity(sellerModel);
 
