@@ -104,17 +104,33 @@ public class MessageController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
         }
     }
-//    @GetMapping("/messageListingByBuyerId/{buyerId}")
-//    public ResponseEntity<?> messageListingByBuyerId(@PathVariable("buyerId") Long buyerId) {
-//        try {
-//            List<MessageListingByBuyerIdModel> messageListingByBuyerId = messageRequestService.getmessageListingByBuyerId(buyerId);
-//            return ResponseEntity.ok(messageListingByBuyerId);
-//        } catch (InputValidationFailedException e) {
-//            List<String> errors = e.getErrors();
-//            String errorMessage = "{ error: { message: \"" + String.join(",", errors) + "\" } }";
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
-//        }
-//    }
+    @GetMapping("/messageListing")
+    public ResponseEntity<List<MessageListingModel>> messageListing() {
+        List<MessageListingModel> messageListing = messageRequestService.getAllMessage();
+        return ResponseEntity.ok(messageListing);
+    }
+    @GetMapping("/messageListingByBuyerId/{buyerId}")
+    public ResponseEntity<?> messageListingByBuyerId(@PathVariable("buyerId") Long buyerId) {
+        try {
+            List<MessageListingByBuyerIdModel> messageListingByBuyerId = messageRequestService.getmessageListingByBuyerId(buyerId);
+            return ResponseEntity.ok(messageListingByBuyerId);
+        } catch (InputValidationFailedException e) {
+            List<String> errors = e.getErrors();
+            String errorMessage = "{ error: { message: \"" + String.join(",", errors) + "\" } }";
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+        }
+    }
+    @GetMapping("/messageListingBySellerId/{sellerId}")
+    public ResponseEntity<?> messageListingBySellerId(@PathVariable("sellerId") Long sellerId) {
+        try {
+            List<MessageListingByBuyerIdModel> messageListingBySellerId = messageRequestService.getmessageListingBySellerId(sellerId);
+            return ResponseEntity.ok(messageListingBySellerId);
+        } catch (InputValidationFailedException e) {
+            List<String> errors = e.getErrors();
+            String errorMessage = "{ error: { message: \"" + String.join(",", errors) + "\" } }";
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+        }
+    }
 }
 
 

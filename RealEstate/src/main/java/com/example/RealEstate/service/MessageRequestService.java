@@ -53,7 +53,7 @@ private OrderRepository orderRepository;
         messageRequestEntity.setMessage(messageRequestModel.getMessage());
 
         messageRequestEntity.setDate(new Date(System.currentTimeMillis()));
-messageRequestEntity.setmessagefrom(messageRequestModel.getmessagefrom());
+messageRequestEntity.setMessagefrom(messageRequestModel.getmessagefrom());
         messageRepository.save(messageRequestEntity);
     }
 
@@ -161,22 +161,45 @@ orderRepository.save(orderEntity);
         return null;
     }
 
-//    public List<MessageListingByBuyerIdModel> getmessageListingByBuyerId(Long buyerId) {
-//        List<String> userError = new ArrayList<>();
-//
-//        if (buyerId == null || buyerId ==0) {
-//            userError.add("BuyerId cannot be empty");
-//        }
-//        int count=orderRepository.findByBuyerId(buyerId);
-//        if(count==0){
-//            userError.add("BuyerId not found");
-//        }
-//        if (!userError.isEmpty()) {
-//            throw new InputValidationFailedException("Input validation failed", userError);
-//        }
-//        List<MessageListingByBuyerIdModel> results = messageRepository.getmessageListingByBuyerId(buyerId);
-//        return results;
-//    }
+    public List<MessageListingByBuyerIdModel> getmessageListingByBuyerId(Long buyerId) {
+        List<String> userError = new ArrayList<>();
+
+        if (buyerId == null || buyerId ==0) {
+            userError.add("BuyerId cannot be empty");
+        }
+        int count=messageRepository.findByBuyerId(buyerId);
+        if(count==0){
+            userError.add("BuyerId not found");
+        }
+        if (!userError.isEmpty()) {
+            throw new InputValidationFailedException("Input validation failed", userError);
+        }
+        List<MessageListingByBuyerIdModel> results = messageRepository.getmessageListingByBuyerId(buyerId);
+        return results;
     }
+
+    public List<MessageListingByBuyerIdModel> getmessageListingBySellerId(Long sellerId) {
+        List<String> userError = new ArrayList<>();
+
+        if (sellerId == null || sellerId ==0) {
+            userError.add("sellerId cannot be empty");
+        }
+        int count=messageRepository.findBySellerId(sellerId);
+        if(count==0){
+            userError.add("sellerId not found");
+        }
+        if (!userError.isEmpty()) {
+            throw new InputValidationFailedException("Input validation failed", userError);
+        }
+        List<MessageListingByBuyerIdModel> results = messageRepository.getmessageListingBySellerId(sellerId);
+        return results;
+    }
+
+    public List<MessageListingModel> getAllMessage() {
+        List<MessageListingModel> results = messageRepository.getAllMessage();
+        return results;
+    }
+}
+
 
 
