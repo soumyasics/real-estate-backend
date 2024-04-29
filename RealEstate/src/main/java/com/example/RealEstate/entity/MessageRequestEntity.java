@@ -86,13 +86,14 @@ public class MessageRequestEntity {
         this.date = date;
     }
 
-    public String getmessagefrom() {
+    public String getMessagefrom() {
         return messagefrom;
     }
 
-    public void setmessagefrom(String messagefrom) {
+    public void setMessagefrom(String messagefrom) {
         this.messagefrom = messagefrom;
     }
+
 }
 
 
