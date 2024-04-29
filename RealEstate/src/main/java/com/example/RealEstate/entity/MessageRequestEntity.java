@@ -22,17 +22,20 @@ public class MessageRequestEntity {
     private String message;
     @Column(name = "date", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Date date;
+    @Column(name = "messagefrom")
+    private String messagefrom;
 
     public MessageRequestEntity() {
     }
 
-    public MessageRequestEntity(Long id, Long buyerid, Long sellerid, Long propertyid, String message, Date date) {
+    public MessageRequestEntity(Long id, Long buyerid, Long sellerid, Long propertyid, String message, Date date, String messagefrom) {
         this.id = id;
         this.buyerid = buyerid;
         this.sellerid = sellerid;
         this.propertyid = propertyid;
         this.message = message;
         this.date = date;
+        this.messagefrom = messagefrom;
     }
 
     public Long getId() {
@@ -82,5 +85,14 @@ public class MessageRequestEntity {
     public void setDate(Date date) {
         this.date = date;
     }
+
+    public String getmessagefrom() {
+        return messagefrom;
+    }
+
+    public void setmessagefrom(String messagefrom) {
+        this.messagefrom = messagefrom;
+    }
 }
+
 
