@@ -26,6 +26,7 @@ import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
 
 @RestController
 @RequestMapping("/message")
+@CrossOrigin(origins = "http://localhost:3000")
 public class MessageController {
 
 
@@ -92,6 +93,28 @@ public class MessageController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
         }
     }
+    @GetMapping("/getPropertyByPropertyId/{id}")
+    public ResponseEntity<?> getPropertyByPropertyId(@PathVariable("id") Long id) {
+        try {
+            PropertyViewModel propertyViewModel = messageRequestService.getPropertyByPropertyId(id);
+            return ResponseEntity.ok(propertyViewModel);
+        } catch (InputValidationFailedException e) {
+            List<String> errors = e.getErrors();
+            String errorMessage = "{ error: { message: \"" + String.join(",", errors) + "\" } }";
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+        }
+    }
+//    @GetMapping("/messageListingByBuyerId/{buyerId}")
+//    public ResponseEntity<?> messageListingByBuyerId(@PathVariable("buyerId") Long buyerId) {
+//        try {
+//            List<MessageListingByBuyerIdModel> messageListingByBuyerId = messageRequestService.getmessageListingByBuyerId(buyerId);
+//            return ResponseEntity.ok(messageListingByBuyerId);
+//        } catch (InputValidationFailedException e) {
+//            List<String> errors = e.getErrors();
+//            String errorMessage = "{ error: { message: \"" + String.join(",", errors) + "\" } }";
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+//        }
+//    }
 }
 
 

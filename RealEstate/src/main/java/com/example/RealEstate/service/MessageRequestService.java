@@ -1,12 +1,11 @@
 package com.example.RealEstate.service;
 
-import com.example.RealEstate.entity.MessageRequestEntity;
-import com.example.RealEstate.entity.OrderEntity;
-import com.example.RealEstate.entity.SellerEntity;
+import com.example.RealEstate.entity.*;
 import com.example.RealEstate.exception.InputValidationFailedException;
 import com.example.RealEstate.model.*;
 import com.example.RealEstate.repository.MessageRepository;
 import com.example.RealEstate.repository.OrderRepository;
+import com.example.RealEstate.repository.PropertyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -23,6 +22,8 @@ public class MessageRequestService {
 
 @Autowired
 private OrderRepository orderRepository;
+    @Autowired
+    private PropertyRepository propertyRepository;
     public MessageRequestService(MessageRepository messageRepository) {
         this.messageRepository = messageRepository;
     }
@@ -52,7 +53,7 @@ private OrderRepository orderRepository;
         messageRequestEntity.setMessage(messageRequestModel.getMessage());
 
         messageRequestEntity.setDate(new Date(System.currentTimeMillis()));
-
+messageRequestEntity.setmessagefrom(messageRequestModel.getmessagefrom());
         messageRepository.save(messageRequestEntity);
     }
 
@@ -136,4 +137,46 @@ orderRepository.save(orderEntity);
         List<OrderListByPropertyIdModel> results = orderRepository.getAllOrdersByPropertyId(propertyId);
         return results;
     }
-}
+
+    public PropertyViewModel getPropertyByPropertyId(Long id) {
+        Optional<PropertyEntity> optionalPropertyEntity = propertyRepository.findById(id);
+        if (optionalPropertyEntity.isPresent()) {
+            PropertyEntity propertyEntity = optionalPropertyEntity.get();
+            PropertyViewModel propertyViewModel = new PropertyViewModel();
+            propertyViewModel.setArea(propertyEntity.getArea());
+            propertyViewModel.setCity(propertyEntity.getCity());
+            propertyViewModel.setDistrict(propertyEntity.getDistrict());
+            propertyViewModel.setFeatures(propertyEntity.getFeatures());
+            propertyViewModel.setLandmark(propertyViewModel.getLandmark());
+            propertyViewModel.setLat(propertyEntity.getLat());
+            propertyViewModel.setLog(propertyViewModel.getLog());
+            propertyViewModel.setPic(propertyViewModel.getPic());
+            propertyViewModel.setPrice(propertyViewModel.getPrice());
+            propertyViewModel.setSid(propertyViewModel.getSid());
+            propertyViewModel.setType(propertyEntity.getType());
+
+            return propertyViewModel;
+        }
+
+        return null;
+    }
+
+//    public List<MessageListingByBuyerIdModel> getmessageListingByBuyerId(Long buyerId) {
+//        List<String> userError = new ArrayList<>();
+//
+//        if (buyerId == null || buyerId ==0) {
+//            userError.add("BuyerId cannot be empty");
+//        }
+//        int count=orderRepository.findByBuyerId(buyerId);
+//        if(count==0){
+//            userError.add("BuyerId not found");
+//        }
+//        if (!userError.isEmpty()) {
+//            throw new InputValidationFailedException("Input validation failed", userError);
+//        }
+//        List<MessageListingByBuyerIdModel> results = messageRepository.getmessageListingByBuyerId(buyerId);
+//        return results;
+//    }
+    }
+
+

@@ -8,16 +8,18 @@ public class MessageRequestModel {
     private Long propertyId;
     private String message;
     private Date date;
+private String messagefrom;
 
     public MessageRequestModel() {
     }
 
-    public MessageRequestModel(Long buyerId, Long sellerId, Long propertyId, String message, Date date) {
+    public MessageRequestModel(Long buyerId, Long sellerId, Long propertyId, String message, Date date, String messagefrom) {
         this.buyerId = buyerId;
         this.sellerId = sellerId;
         this.propertyId = propertyId;
         this.message = message;
         this.date = date;
+        this.messagefrom = messagefrom;
     }
 
     public Long getBuyerId() {
@@ -58,5 +60,13 @@ public class MessageRequestModel {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public String getmessagefrom() {
+        return messagefrom;
+    }
+
+    public void setmessagefrom(String messagefrom) {
+        this.messagefrom = messagefrom;
     }
 }
