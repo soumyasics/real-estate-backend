@@ -37,5 +37,5 @@ public interface OrderRepository extends JpaRepository<OrderEntity,Long> {
     List<OrderListByPropertyIdModel> getAllOrdersByPropertyId(@Param("propertyId") Long propertyId);
 
 
-    Optional<OrderEntity> findByBuyerIdAndPropertyId(Long buyerId, Long propertyId);
+    List<OrderEntity> findByBuyerIdAndPropertyId(Long buyerId, Long propertyId);
 }
