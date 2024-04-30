@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface OrderRepository extends JpaRepository<OrderEntity,Long> {
     @Query("SELECT COUNT(o.buyerId) from OrderEntity o where o.buyerId=:buyerId")
@@ -34,4 +35,7 @@ public interface OrderRepository extends JpaRepository<OrderEntity,Long> {
             "FROM OrderEntity o JOIN PropertyEntity s ON s.id = o.propertyId"+
     " WHERE o.propertyId = :propertyId")
     List<OrderListByPropertyIdModel> getAllOrdersByPropertyId(@Param("propertyId") Long propertyId);
+
+
+    Optional<OrderEntity> findByBuyerIdAndPropertyId(Long buyerId, Long propertyId);
 }
