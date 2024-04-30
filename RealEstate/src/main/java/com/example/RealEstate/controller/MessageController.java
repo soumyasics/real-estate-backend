@@ -52,9 +52,6 @@ public class MessageController {
             List<String> errors = e.getErrors();
             String errorMessage = "{ error: { message: \"" + String.join(",", errors) + "\" } }";
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
-        } catch (RuntimeException e) {
-            String errorMessage = "{ error: { message: \"" + e.getMessage() + "\" } }";
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
         }
     }
 
