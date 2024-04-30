@@ -1,7 +1,5 @@
 package com.example.RealEstate.service;
 
-
-
 import com.example.RealEstate.entity.*;
 import com.example.RealEstate.exception.InputValidationFailedException;
 import com.example.RealEstate.model.*;
@@ -62,38 +60,34 @@ public class MessageRequestService {
     public void placeOrder(OrderModel orderModel) {
         List<String> userError = new ArrayList<>();
 
-        if (orderModel.getBuyerId() == null || orderModel.getBuyerId() == 0) {
+        if (orderModel.getBuyerId() == null || orderModel.getBuyerId() ==0) {
             userError.add("BuyerId cannot be empty");
         }
-        if (orderModel.getSellerId() == null || orderModel.getSellerId() == 0) {
+        if (orderModel.getSellerId() == null || orderModel.getSellerId() ==0) {
             userError.add("SellerId cannot be empty");
         }
-        if (orderModel.getPropertyId() == null || orderModel.getPropertyId() == 0) {
+        if (orderModel.getPropertyId() == null || orderModel.getPropertyId() ==0) {
             userError.add("PropertyId cannot be empty");
         }
-        if (orderModel.getPrice() == null || orderModel.getPrice() == 0) {
+        if (orderModel.getPrice() == null || orderModel.getPrice()== 0) {
             userError.add("Price cannot be zero");
-        }
-        if (!userError.isEmpty()) {
-            throw new InputValidationFailedException("Input validation failed", userError);
         }
         List<OrderEntity> existingOrders = orderRepository.findByBuyerIdAndPropertyId(orderModel.getBuyerId(), orderModel.getPropertyId());
         if (!existingOrders.isEmpty()) {
-            throw new RuntimeException("Order already exists for the same property by the same buyer");
+        userError.add("Order already exists for the same property by the same buyer");
         }
 
-// Proceed with creating the new order
-
-// Proceed with creating the new order
-        else {
-            OrderEntity orderEntity = new OrderEntity();
-            orderEntity.setBuyerId(orderModel.getBuyerId());
-            orderEntity.setSellerId(orderModel.getSellerId());
-            orderEntity.setPropertyId(orderModel.getPropertyId());
-            orderEntity.setPrice(orderModel.getPrice());
-            orderRepository.save(orderEntity);
+        if (!userError.isEmpty()) {
+            throw new InputValidationFailedException("Input validation failed", userError);
         }
+        OrderEntity orderEntity=new OrderEntity();
+        orderEntity.setBuyerId(orderModel.getBuyerId());
+        orderEntity.setSellerId(orderModel.getSellerId());
+        orderEntity.setPropertyId(orderModel.getPropertyId());
+        orderEntity.setPrice(orderModel.getPrice());
+        orderRepository.save(orderEntity);
     }
+
     public List<OrderListingModel> getAllOrders() {
         List<OrderListingModel> results = orderRepository.getAllOrders();
         return results;
@@ -125,6 +119,7 @@ public class MessageRequestService {
         if(count==0){
             userError.add("SellerId not found");
         }
+
         if (!userError.isEmpty()) {
             throw new InputValidationFailedException("Input validation failed", userError);
         }
@@ -211,7 +206,6 @@ public class MessageRequestService {
         return results;
     }
 }
-
 
 
 
