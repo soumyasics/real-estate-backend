@@ -247,7 +247,7 @@ public class SellerService {
         sellerEntity.setEmail(sellerUpdateModel.getEmail());
         sellerEntity.setUsername(sellerUpdateModel.getUsername());
         sellerEntity.setAddress(sellerUpdateModel.getAddress());
-        sellerEntity.setProfile(sellerUpdateModel.getProfile());
+
         return  userRepository.save(sellerEntity);
     }
 
