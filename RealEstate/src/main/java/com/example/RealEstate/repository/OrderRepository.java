@@ -16,9 +16,11 @@ public interface OrderRepository extends JpaRepository<OrderEntity,Long> {
     int findBySellerId(@Param("sellerId") Long sellerId);
     @Query("SELECT COUNT(o.propertyId) from OrderEntity o where o.propertyId=:propertyId")
     int findByPropertyId(@Param("propertyId") Long propertyId);
-    @Query("SELECT new com.example.RealEstate.model.OrderListingModel(o.buyerId,o.sellerId,o.propertyId,o.price) " +
-            "FROM OrderEntity o ")
+    @Query("SELECT new com.example.RealEstate.model.OrderListingModel(o.buyerId,b.firstname,o.sellerId,s.firstname,o.propertyId,p.pic,p.city,o.price) " +
+            "FROM OrderEntity o JOIN BuyerEntity b ON b.id = o.buyerId JOIN SellerEntity s ON s.id = o.sellerId JOIN PropertyEntity p " +
+            "ON p.id = o.propertyId")
     List<OrderListingModel> getAllOrders();
+
     @Query("SELECT new com.example.RealEstate.model.OrderListByBuyerIdModel(b.firstname, b.lastname, b.address, b.email, b.phone, o.price) " +
             "FROM OrderEntity o JOIN BuyerEntity b ON b.id = o.buyerId " +
             "WHERE o.buyerId = :buyerId")
