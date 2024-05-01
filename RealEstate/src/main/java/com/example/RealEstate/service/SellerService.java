@@ -375,8 +375,8 @@ public class SellerService {
         return null;
     }
 
-    public List<PropertyEntity> viewAllProperties() {
-        List<PropertyEntity> results = propertyRepository.findAll();
+    public List<ViewAllPropertiesModel> viewAllProperties() {
+        List<ViewAllPropertiesModel> results = propertyRepository.viewAllProperties();
         return results;
     }
 

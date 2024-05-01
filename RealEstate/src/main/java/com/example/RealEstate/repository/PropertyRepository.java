@@ -3,6 +3,7 @@ package com.example.RealEstate.repository;
 import com.example.RealEstate.entity.PropertyEntity;
 import com.example.RealEstate.model.PropertyListingModel;
 import com.example.RealEstate.model.PropertyAndSellerModel;
+import com.example.RealEstate.model.ViewAllPropertiesModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -28,8 +29,10 @@ public interface PropertyRepository extends JpaRepository<PropertyEntity,Long> {
     @Query("SELECT COUNT(id) FROM PropertyEntity p WHERE p.id = :id")
     int countById(@Param("id") Long id);
 
-
-
+    @Query("SELECT new com.example.RealEstate.model.ViewAllPropertiesModel(p.id,p.sid,s.firstname,p.pic, p.lat, p.log, p.district, p.city, p.type, p.landmark, p.features, p.price, p.area,p.status) " +
+            "FROM PropertyEntity p " +
+            "JOIN SellerEntity s ON  p.sid = s.id")
+    List<ViewAllPropertiesModel> viewAllProperties();
 }
 
 
