@@ -15,11 +15,12 @@ public class PropertyListingModel {
     private String area;
     private String sellerName;
     private String sellerEmail;
+    private String status;
 
     public PropertyListingModel() {
     }
 
-    public PropertyListingModel(Long propertyId, Long sellerId, String pic, Double lat, Double log, String district, String city, String type, String landmark, String features, Integer price, String area, String sellerName, String sellerEmail) {
+    public PropertyListingModel(Long propertyId, Long sellerId, String pic, Double lat, Double log, String district, String city, String type, String landmark, String features, Integer price, String area, String sellerName, String sellerEmail, String status) {
         this.propertyId = propertyId;
         this.sellerId = sellerId;
         this.pic = pic;
@@ -34,6 +35,7 @@ public class PropertyListingModel {
         this.area = area;
         this.sellerName = sellerName;
         this.sellerEmail = sellerEmail;
+        this.status = status;
     }
 
     public Long getPropertyId() {
@@ -146,5 +148,13 @@ public class PropertyListingModel {
 
     public void setSellerEmail(String sellerEmail) {
         this.sellerEmail = sellerEmail;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

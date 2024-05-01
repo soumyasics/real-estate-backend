@@ -86,6 +86,17 @@ public class MessageRequestService {
         orderEntity.setPropertyId(orderModel.getPropertyId());
         orderEntity.setPrice(orderModel.getPrice());
         orderRepository.save(orderEntity);
+
+
+        //status of the property to "soldout"
+        Optional<PropertyEntity> propertyOptional = propertyRepository.findById(orderModel.getPropertyId());
+        if (propertyOptional.isPresent()) {
+            PropertyEntity propertyEntity = propertyOptional.get();
+
+            propertyEntity.setStatus("soldout");
+            propertyRepository.save(propertyEntity);
+        }
+
     }
 
     public List<OrderListingModel> getAllOrders() {

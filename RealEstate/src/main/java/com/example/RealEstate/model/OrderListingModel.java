@@ -10,6 +10,7 @@ public class OrderListingModel {
     private String address;
     private Double price;
 
+
     public OrderListingModel() {
     }
 
