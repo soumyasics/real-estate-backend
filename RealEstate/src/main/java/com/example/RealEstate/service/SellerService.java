@@ -8,6 +8,7 @@ import com.example.RealEstate.exception.InputValidationFailedException;
 
 import com.example.RealEstate.model.*;
 
+import com.example.RealEstate.repository.BuyerRepository;
 import com.example.RealEstate.repository.PropertyRepository;
 import com.example.RealEstate.repository.SellerRepository;
 
@@ -329,12 +330,6 @@ public class SellerService {
     }
 
 
-    public PropertyAndSellerModel getPropertybyId(Long id) {
-        PropertyAndSellerModel property = propertyRepository.getPropertyAndSeller(id);
-
-        return property;
-    }
-
     public List<PropertyEntity> getPropertybySId(Long sid) {
         List<PropertyEntity> properties = propertyRepository.findBySId(sid);
 
@@ -383,6 +378,20 @@ public class SellerService {
     public List<PropertyEntity> viewAllProperties() {
         List<PropertyEntity> results = propertyRepository.findAll();
         return results;
+    }
+
+    public PropertyAndSellerModel getPropertyById(Long id) {
+        List<String> userError = new ArrayList<>();
+        int count=propertyRepository.countById(id);
+        if(count == 0){
+            userError.add("PropertyId not found");
+        }
+        if (!userError.isEmpty()) {
+            throw new InputValidationFailedException("Input validation failed", userError);
+        }
+        PropertyAndSellerModel property = propertyRepository.getPropertyAndSeller(id);
+
+        return property;
     }
 }
 

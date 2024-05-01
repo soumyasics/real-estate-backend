@@ -136,14 +136,16 @@ Long sellerId=userService.sellerLogin(sellerLoginModel);
         List<PropertyEntity> viewProperties = userService.viewAllProperties();
         return ResponseEntity.ok(viewProperties);
     }
-    @GetMapping("/property{id}")
+    @GetMapping("/property/{id}")
     public ResponseEntity<?> getPropertyId(@PathVariable("id") Long id ) {
         try {
-            PropertyAndSellerModel savedProperty = userService.getPropertybyId(id);
+            PropertyAndSellerModel savedProperty = userService.getPropertyById(id);
 
             return ResponseEntity.ok(savedProperty);
-        } catch (ResourceNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (InputValidationFailedException e) {
+            List<String> errors = e.getErrors();
+            String errorMessage = "{ error: { message: \"" + String.join(",", errors) + "\" } }";
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
         }
 
     }
