@@ -132,8 +132,8 @@ Long sellerId=userService.sellerLogin(sellerLoginModel);
         return ResponseEntity.ok(propertyListingModel);
     }
     @GetMapping("/viewAllProperties")
-    public ResponseEntity<List<PropertyEntity>> viewAllProperties() {
-        List<PropertyEntity> viewProperties = userService.viewAllProperties();
+    public ResponseEntity<List<ViewAllPropertiesModel>> viewAllProperties() {
+        List<ViewAllPropertiesModel> viewProperties = userService.viewAllProperties();
         return ResponseEntity.ok(viewProperties);
     }
     @GetMapping("/property/{id}")
