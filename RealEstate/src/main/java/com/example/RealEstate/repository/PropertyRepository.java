@@ -1,21 +1,11 @@
 package com.example.RealEstate.repository;
 
 import com.example.RealEstate.entity.PropertyEntity;
-import com.example.RealEstate.entity.SellerEntity;
 import com.example.RealEstate.model.PropertyListingModel;
 import com.example.RealEstate.model.PropertyAndSellerModel;
-import jakarta.persistence.metamodel.SingularAttribute;
-import org.springframework.data.jpa.domain.AbstractPersistable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-
-import java.io.Serializable;
-import java.util.List;
-import java.util.Optional;
 
 import java.util.List;
 
@@ -34,6 +24,7 @@ public interface PropertyRepository extends JpaRepository<PropertyEntity,Long> {
             "FROM PropertyEntity p " +
             "JOIN SellerEntity s ON  p.sid = s.id WHERE p.id = :id")
     PropertyAndSellerModel getPropertyAndSeller(Long id);
+
 
 
 }

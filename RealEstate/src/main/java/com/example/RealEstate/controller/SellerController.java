@@ -131,7 +131,11 @@ Long sellerId=userService.sellerLogin(sellerLoginModel);
         List<PropertyListingModel> propertyListingModel = userService.getAllProperties();
         return ResponseEntity.ok(propertyListingModel);
     }
-
+    @GetMapping("/viewAllProperties")
+    public ResponseEntity<List<PropertyEntity>> viewAllProperties() {
+        List<PropertyEntity> viewProperties = userService.viewAllProperties();
+        return ResponseEntity.ok(viewProperties);
+    }
     @GetMapping("/property{id}")
     public ResponseEntity<?> getPropertyId(@PathVariable("id") Long id ) {
         try {
