@@ -1,7 +1,72 @@
 package com.example.RealEstate.model;
 
 public class PropertyAndSellerModel {
+    private Long propertyid;
+    private Long sellerid;
+    private String pic;
+    private Double lat;
+    private Double log;
+    private String district;
+    private String city;
+    private String type;
+    private String landmark;
+    private String features;
+    private Integer price;
+    private String area;
+    private String sellerFirstName;
+    private String sellerEmail;
+
+
+    private String sellerLastname;
+    private int sellerage;
+    private String sellerdob;
+    private String sellergender;
+    private Long sellerphone;
+
+    private String selleraddress;
+    private String sellerusername;
+
     public PropertyAndSellerModel() {
+    }
+
+    public PropertyAndSellerModel(Long propertyid, Long sellerid, String pic, Double lat, Double log, String district, String city, String type, String landmark, String features, Integer price, String area, String sellerFirstName, String sellerEmail, String sellerLastname, int sellerage, String sellerdob, String sellergender, Long sellerphone, String selleraddress, String sellerusername) {
+        this.propertyid = propertyid;
+        this.sellerid = sellerid;
+        this.pic = pic;
+        this.lat = lat;
+        this.log = log;
+        this.district = district;
+        this.city = city;
+        this.type = type;
+        this.landmark = landmark;
+        this.features = features;
+        this.price = price;
+        this.area = area;
+        this.sellerFirstName = sellerFirstName;
+        this.sellerEmail = sellerEmail;
+        this.sellerLastname = sellerLastname;
+        this.sellerage = sellerage;
+        this.sellerdob = sellerdob;
+        this.sellergender = sellergender;
+        this.sellerphone = sellerphone;
+        this.selleraddress = selleraddress;
+        this.sellerusername = sellerusername;
+    }
+
+    public Long getPropertyid() {
+        return propertyid;
+    }
+
+    public void setPropertyid(Long propertyid) {
+        this.propertyid = propertyid;
+    }
+
+    public Long getSellerid() {
+        return sellerid;
+    }
+
+    public void setSellerid(Long sellerid) {
+        this.sellerid = sellerid;
     }
 
     public String getPic() {
@@ -155,53 +220,4 @@ public class PropertyAndSellerModel {
     public void setSellerusername(String sellerusername) {
         this.sellerusername = sellerusername;
     }
-
-    public PropertyAndSellerModel(String pic, Double lat, Double log, String district, String city, String type, String landmark, String features, Integer price, String area, String sellerFirstName, String sellerEmail, String sellerLastname, int sellerage, String sellerdob, String sellergender, Long sellerphone, String selleraddress, String sellerusername) {
-        this.pic = pic;
-        this.lat = lat;
-        this.log = log;
-        this.district = district;
-        this.city = city;
-        this.type = type;
-        this.landmark = landmark;
-        this.features = features;
-        this.price = price;
-        this.area = area;
-        this.sellerFirstName = sellerFirstName;
-        this.sellerEmail = sellerEmail;
-        this.sellerLastname = sellerLastname;
-        this.sellerage = sellerage;
-        this.sellerdob = sellerdob;
-        this.sellergender = sellergender;
-        this.sellerphone = sellerphone;
-        this.selleraddress = selleraddress;
-        this.sellerusername = sellerusername;
-    }
-
-    private String pic;
-    private Double lat;
-    private Double log;
-    private String district;
-    private String city;
-    private String type;
-    private String landmark;
-    private String features;
-    private Integer price;
-    private String area;
-    private String sellerFirstName;
-    private String sellerEmail;
-
-
-    private String sellerLastname;
-    private int sellerage;
-    private String sellerdob;
-    private String sellergender;
-    private Long sellerphone;
-
-    private String selleraddress;
-    private String sellerusername;
-
-
-
-
 }
