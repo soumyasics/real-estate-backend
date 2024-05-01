@@ -38,11 +38,13 @@ public class PropertyEntity {
     private int price;
     @Column(name = "area")
     private String area;
+    @Column(name = "status")
+    private String status="pending";
 
     public PropertyEntity() {
     }
 
-    public PropertyEntity(Long id, Long sid, String pic, double lat, double log, String district, String city, String type, int isActive, String landmark, String features, int price, String area) {
+    public PropertyEntity(Long id, Long sid, String pic, double lat, double log, String district, String city, String type, int isActive, String landmark, String features, int price, String area, String status) {
         this.id = id;
         this.sid = sid;
         this.pic = pic;
@@ -56,6 +58,7 @@ public class PropertyEntity {
         this.features = features;
         this.price = price;
         this.area = area;
+        this.status = status;
     }
 
     public Long getId() {
@@ -160,5 +163,13 @@ public class PropertyEntity {
 
     public void setArea(String area) {
         this.area = area;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }
